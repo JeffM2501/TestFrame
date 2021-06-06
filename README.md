@@ -4,6 +4,8 @@ It is made using C++ because it uses classes for windows and views.
 
 The idea is you add code to places in the test frame to get something showing quickly with access to common features such as resources, cameras, and other tools.
 
+![image](https://user-images.githubusercontent.com/322174/120928519-d02f7880-c699-11eb-9bb7-5a47564ca80d.png)
+
 ## Building
 
 1) Make sure you have the submodules
