@@ -29,6 +29,7 @@
 **********************************************************************************************/
 
 #include "scene_view.h"
+#include "drawing_utils.h"
 
 #include "raylib.h"
 #include "rlgl.h"
@@ -123,11 +124,11 @@ void SceneView::DrawDefaultScene()
 {
     DrawSkybox();
 
-    int planeSize = 20;
+    float planeSize = 25.0f;
 
     rlDisableDepthTest();
-    DrawPlane(Vector3Zero(), Vector2{ (float)planeSize, (float)planeSize }, DARKBROWN);
-    DrawGrid(planeSize, 1);
+    DrawPlane(Vector3Zero(), Vector2{ (float)planeSize, (float)planeSize }, Colors::Brown);
+    DrawUtils::DrawGridXZ(Vector3Zero(), planeSize, 1, Colors::Beige, Colors::DarkBrown);
     rlDrawRenderBatchActive();
     rlSetLineWidth(2.0f);
     DrawGizmo(2.0f);

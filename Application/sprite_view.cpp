@@ -29,6 +29,7 @@
 **********************************************************************************************/
 
 #include "sprite_view.h"
+#include "drawing_utils.h"
 
 
 SpriteView::SpriteView() : MainView()
@@ -63,7 +64,7 @@ void SpriteView::Show(const Rectangle& contentArea)
         contentArea,
         Vector2Zero(),
         0,
-        WHITE);
+        Colors::White);
 }
 
 void SpriteView::ResizeContentArea(const Rectangle& contentArea)
@@ -76,13 +77,13 @@ void SpriteView::ResizeContentArea(const Rectangle& contentArea)
 
     SceneTexture = LoadRenderTexture((int)contentArea.width, (int)contentArea.height);
     BeginTextureMode(SceneTexture);
-    ClearBackground(BLACK);
+    ClearBackground(Colors::Black);
     EndTextureMode();
 }
 
 void SpriteView::OnShow(const Rectangle& contentArea)
 {
-    ClearBackground(DARKGRAY);
-
-    DrawTexture(Tx, 10, 10, WHITE);
+    ClearBackground(Colors::DarkGray);
+    DrawUtils::DrawGrid2D(ScreenTools::Center(), (int)RectTools::MaxSize(contentArea), 100, Colors::Gray, Colors::DarkBlue);
+    DrawTexture(Tx, 100, 100, Colors::White);
 }
