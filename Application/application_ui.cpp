@@ -1,7 +1,7 @@
 #include "application_context.h"
 #include "application_ui.h"
 
-#include "Inspector.h"
+#include "inspector_window.h"
 
 #include "raylib.h"
 #include "imgui_internal.h"
@@ -18,13 +18,21 @@ void UIManager::Startup()
     Windows.emplace_back(std::make_shared<InspectorWindow>());
 }
 
+void UIManager::Shutdown()
+{
+    for (auto& window : Windows)
+        window->Shutdown();
+
+    Windows.clear();
+}
+
 void UIManager::Resized()
 {
     for (auto& window : Windows)
         window->Resize();
 }
 
-void UIManager::Show()
+void UIManager::Show(MainView* view)
 {
     ImVec2 screenSize((float)GetScreenWidth(), (float)GetScreenHeight());
 
@@ -51,7 +59,7 @@ void UIManager::Show()
             SetupUI();
 
         for (auto& window : Windows)
-            window->Show(); 
+            window->Show(view); 
 
         auto* rootNode = ImGui::DockBuilderGetNode(DockspaceId);
         if (rootNode != nullptr && rootNode->CentralNode != nullptr)

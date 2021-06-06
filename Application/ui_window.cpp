@@ -3,13 +3,13 @@
 
 #include "imgui.h"
 
-void UIWindow::Show()
+void UIWindow::Show(MainView* view)
 {
     if (Shown)
     {
         if (ImGui::Begin(Name.c_str(), &Shown, ImGuiWindowFlags_None))
         {
-            OnShow();
+            OnShow(view);
             ImGui::End();
         }
     }
@@ -33,7 +33,7 @@ LogWindow::LogWindow() : UIWindow()
     Name = LogWindowName;
 }
 
-void LogWindow::OnShow()
+void LogWindow::OnShow(MainView*)
 {
     bool scroollBottom = false;
 

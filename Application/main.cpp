@@ -33,10 +33,7 @@ int main(int argc, char* argv[])
     InitWindow(1280, 720, "TestBed Application");
     SetupRLImGui(true);
 
-    if (!ShowStartupLog)
-        LogSink::Flush();
-
-    TraceLog(LOG_INFO, "Testbed Startup");
+    ApplicationStartup();
 
     UIManager ui;
     MainView mainView;
@@ -44,8 +41,6 @@ int main(int argc, char* argv[])
     MainView& view = mainView;
 
     ui.Startup();
-
-    ApplicationStartup();
 
     Rectangle lastContentArea = { 0 };
 
@@ -74,11 +69,14 @@ int main(int argc, char* argv[])
         view.Show(lastContentArea);
 
         BeginRLImGui();
-        ui.Show();
+        ui.Show(&view);
         EndRLImGui();
 
         EndDrawing();
     }
+    view.Shutdown();
+    ui.Shutdown();
+
     ApplicationShutdown();
 
     ShutdownRLImGui();
@@ -87,12 +85,15 @@ int main(int argc, char* argv[])
 
 void ApplicationStartup()
 {
+    if (!ShowStartupLog)
+        LogSink::Flush();
 
+    TraceLog(LOG_INFO, "Testbed Startup");
 }
 
 void ApplicationShutdown()
 {
-
+    LogSink::Flush();
 }
 
 namespace LogSink

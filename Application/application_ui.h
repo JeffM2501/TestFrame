@@ -12,8 +12,9 @@ class UIManager
 {
 public:
     void Startup();
+    void Shutdown();
     void Update();
-    void Show();
+    void Show(MainView* view = nullptr);
     void Resized();
 
     inline const Rectangle& GetContentArea() { return ContentArea; }
