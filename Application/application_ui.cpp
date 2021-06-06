@@ -96,8 +96,12 @@ void UIManager::SetupUI()
     auto* rootNode = ImGui::DockBuilderGetNode(DockspaceId);
     if (rootNode == nullptr || rootNode->ChildNodes[0] == nullptr)
     {
-        auto childId = ImGui::DockBuilderSplitNode(DockspaceId, ImGuiDir_Down, 0.25f, nullptr, nullptr);
+        ImGuiID centralNode = DockspaceId;
+        auto rightId = ImGui::DockBuilderSplitNode(centralNode, ImGuiDir_Right, 0.25f, nullptr, &centralNode);
 
+        auto childId = ImGui::DockBuilderSplitNode(centralNode, ImGuiDir_Down, 0.25f, nullptr, nullptr);
+
+        ImGui::DockBuilderDockWindow(InspectorWindowName, rightId);
         ImGui::DockBuilderDockWindow(LogWindowName, childId);
     }
 }
@@ -175,12 +179,12 @@ void UIManager::ShowMenu()
         ImGui::EndMenuBar();
 
         if (openAbout)
-            ImGui::OpenPopup("About Testbed");
-
+            ImGui::OpenPopup("About Testframe");
+        
         if (ImGui::BeginPopupModal("About Testbed", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize))
         {
-            ImGui::TextUnformatted("Raylib Testbed Copyright 2021 Jeffery Myers");
-            ImGui::TextUnformatted("A testbed for trying out things in raylib and Dear ImGui");
+            ImGui::TextUnformatted("Raylib Testframe Copyright 2021 Jeffery Myers");
+            ImGui::TextUnformatted("A Test frame for trying out things in raylib and Dear ImGui");
             if (ImGui::Button("Ok"))
                 ImGui::CloseCurrentPopup();
 

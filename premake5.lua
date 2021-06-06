@@ -101,7 +101,7 @@ project "rlImGui"
 	
 project "Application"
 	kind "WindowedApp"
-	location "Application"
+	location "./"
 	language "C++"
 	targetdir "bin/%{cfg.buildcfg}"
 	cppdialect "C++17"

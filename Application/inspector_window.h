@@ -4,13 +4,15 @@
 
 #include "raylib.h"
 
+constexpr char InspectorWindowName[] = "Inspector###RaylibInspectorWindow";
+
 class InspectorWindow : public UIWindow
 {
 public:
     InspectorWindow() : UIWindow()
     {
         Shown = true;
-        Name = "Inspector";
+        Name = InspectorWindowName;
     }
 
     void OnShow(MainView* view) override

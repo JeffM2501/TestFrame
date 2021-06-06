@@ -94,7 +94,7 @@ void ApplicationStartup()
     if (!ShowStartupLog)
         LogSink::Flush();
 
-    TraceLog(LOG_INFO, "Testbed Startup");
+    TraceLog(LOG_INFO, "Testframe Startup");
 
     rlas_SetAssetRootPath("resources/",false);
 

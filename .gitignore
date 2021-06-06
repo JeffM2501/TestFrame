@@ -357,3 +357,5 @@ MigrationBackup/
 /TestFrame/Application.vcxproj
 /imgui.ini
 /premake5.exe
+/Application.vcxproj
+/Application.vcxproj.filters
