@@ -47,6 +47,16 @@ public:
 
     void OnShow(MainView* view) override
     {
+        float frameTime = GetFrameTime();
+        float instantFPS = 0;
+        if (frameTime > 0)
+            instantFPS = 1 / frameTime;
+
+        int avgFPS = GetFPS();
+
+        ImGui::Text("FPS %dAvg %.0fInst", avgFPS, instantFPS);
+        ImGui::Text("Frame Time %f", frameTime);
+
         Vector2 mouse = GetMousePosition();
         ImGui::Text("Mouse X%.0f Y%.0f", mouse.x, mouse.y);
 
