@@ -24,7 +24,7 @@ The idea is you add code to places in the test frame to get something showing qu
 # What this does
 The testframe has two main concepts Views and Windows. Each exist to display data and work with each other.
 
-# Viws
+# Views
 Views are shown in the background window in the area that is not covered by docked windows. There is only ever one view up at a time. Each View uses a render texture so you can draw to it as if it was a little screen. A rectangle is passed to the view for the vissible area. Views are based on the MainView class and have an OnShow virtual method where you can put drawing code. You can have as many view types as you want and setup the View menu to swap between them.
 
 ## SceneView
