@@ -62,11 +62,6 @@ void SceneView::ResizeContentArea(const Rectangle& contentArea)
     EndTextureMode();
 }
 
-void SceneView::Resized()
-{
-
-}
-
 void SceneView::DrawGizmo(float scale)
 {
     DrawLine3D(Vector3{ 0,0,0 }, Vector3{ scale,0,0 }, RED);
@@ -85,6 +80,7 @@ void SceneView::OnShow(const Rectangle& contentArea)
     Camera.BeginMode3D();
     DrawDefaultScene();
    
+    // Draw stuff here
 
     Camera.EndMode3D();
 }
@@ -104,7 +100,6 @@ void SceneView::DrawDefaultScene()
     rlDrawRenderBatchActive();
     rlSetLineWidth(1.0f);
     rlEnableDepthTest();
-   
 }
 
 void SceneView::SetupSkybox()

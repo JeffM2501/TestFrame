@@ -50,10 +50,8 @@ int main(int argc, char* argv[])
     while (!GlobalContext.Quit && !WindowShouldClose())    // Detect window close button or ESC key
     {
         if (IsWindowResized())
-        {
             ui.Resized();
-            GlobalContext.View->Resized();
-        }
+
         const Rectangle& contentArea = ui.GetContentArea();
 
         if (contentArea.x != GlobalContext.View->LastContentArea.x || contentArea.y != GlobalContext.View->LastContentArea.y || contentArea.width != GlobalContext.View->LastContentArea.width || contentArea.height != GlobalContext.View->LastContentArea.height)

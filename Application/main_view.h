@@ -11,7 +11,6 @@ public:
 
     virtual void Update();
     virtual void Show(const Rectangle& contentArea);
-    virtual void Resized();
     virtual void ResizeContentArea(const Rectangle& contentArea);
 
     virtual void Shutdown();

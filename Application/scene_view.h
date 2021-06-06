@@ -10,7 +10,6 @@ public:
 
     void Update() override;
     void Show(const Rectangle& contentArea) override;
-    void Resized() override;
     void ResizeContentArea(const Rectangle& contentArea) override;
 
     void Shutdown() override;

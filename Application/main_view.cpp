@@ -27,11 +27,6 @@ void MainView::ResizeContentArea(const Rectangle& contentArea)
 {
 }
 
-void MainView::Resized()
-{
-
-}
-
 void MainView::OnShow(const Rectangle& contentArea)
 { 
     ClearBackground(BLACK);

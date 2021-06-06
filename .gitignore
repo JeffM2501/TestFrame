@@ -351,3 +351,9 @@ MigrationBackup/
 /GLMaze2/GLMaze2.exe
 /build/*.vcxproj
 /build/*.filters
+/Application/Application.vcxproj
+/Application/Application.vcxproj.filters
+/TestFrame.sln
+/TestFrame/Application.vcxproj
+/imgui.ini
+/premake5.exe
