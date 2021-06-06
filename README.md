@@ -13,10 +13,12 @@ The idea is you add code to places in the test frame to get something showing qu
     1. Be sure to use the docking branch of ImGui
     2. Download from https://github.com/ocornut/imgui/tree/docking
 3. Get the premake5 for your platform
-4. Run premake
+    1. Download https://premake.github.io/download
+    2. Don't get Premake4
+5. Run premake
     1. Batch file for visual studio 2019 is included
     2. Other targets will need the command line (premake5 gmake)
-5. Build
+6. Build
 
 
 # What this does
@@ -35,7 +37,7 @@ This is a 2d View used for sprite-like drawing.
 Windows are ImGui windows that are docked around the view. They are used to display information about the view. They are based on the UIWindow base class and have a virtual OnShow method that is passed the view. You can use this to get data from the view and display it. There are two default Windows, but you can add as many as you want. The Window menu will display the status of all known windows.
 
 ## LogWindow
-This shows the raylib log output.
+This shows the raylib log output. Has filters for type and by text to search for specific issues in the log.
 
 ## Inspector
 This shows data from the view. It is meant to be exteneed with more info.
