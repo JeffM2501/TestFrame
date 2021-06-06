@@ -1,6 +1,7 @@
 #include "application_context.h"
 #include "application_ui.h"
-
+#include "scene_view.h"
+#include "sprite_view.h"
 #include "inspector_window.h"
 
 #include "raylib.h"
@@ -104,6 +105,25 @@ void UIManager::ShowMenu()
         {
             if (ImGui::MenuItem("Exit", "Alt+F4"))
                 GlobalContext.Quit = true;
+
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Views"))
+        {
+            if (ImGui::MenuItem("3d View"))
+            {
+                GlobalContext.View->Shutdown();
+                delete(GlobalContext.View);
+                GlobalContext.View = new SceneView();
+            }
+
+            if (ImGui::MenuItem("2d View"))
+            {
+                GlobalContext.View->Shutdown();
+                delete(GlobalContext.View);
+                GlobalContext.View = new SpriteView();
+            }
 
             ImGui::EndMenu();
         }

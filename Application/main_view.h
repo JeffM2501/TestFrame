@@ -16,20 +16,15 @@ public:
 
     virtual void Shutdown();
 
-    FPCamera Camera;
+    inline virtual const char* GetViewName() { return nullptr; }
+    inline virtual Vector3 GetViewPos() { return Vector3{ 0,0,0 }; }
+    inline virtual Vector2 GetViewOrientation() { return Vector2{ 0,0 }; }
+
+public:
+    Rectangle LastContentArea = { 0 };
+
 protected:
     virtual void OnShow(const Rectangle& contentArea);
-    void DrawGizmo(float scale = 1);
-
-    void SetupSkybox();
-    void DrawSkybox();
-
-protected:
-    RenderTexture SceneTexture = { 0 };
-
-
-    TextureCubemap SkyboxTexture = { 0 };
-    Model Skybox = { 0 };
 };
 
 RLAPI Shader SetModelMaterialShader(Model* model, int materialIndex, Shader shader);

@@ -8,6 +8,9 @@
 #include "application_ui.h"
 #include "main_view.h"
 
+#include "scene_view.h"
+#include "sprite_view.h"
+
 #include "rlImGui.h"
 #include "raylib.h"
 #include "rlImGui.h"
@@ -36,13 +39,12 @@ int main(int argc, char* argv[])
     ApplicationStartup();
 
     UIManager ui;
-    MainView mainView;
+    SceneView sceneView;
+    SpriteView spriteView;
 
-    MainView& view = mainView;
+    GlobalContext.View = new SceneView();
 
     ui.Startup();
-
-    Rectangle lastContentArea = { 0 };
 
     // Main game loop
     while (!GlobalContext.Quit && !WindowShouldClose())    // Detect window close button or ESC key
@@ -50,32 +52,35 @@ int main(int argc, char* argv[])
         if (IsWindowResized())
         {
             ui.Resized();
-            view.Resized();
+            GlobalContext.View->Resized();
         }
         const Rectangle& contentArea = ui.GetContentArea();
 
-        if (contentArea.x != lastContentArea.x || contentArea.y != lastContentArea.y || contentArea.width != lastContentArea.width || contentArea.height != lastContentArea.height)
+        if (contentArea.x != GlobalContext.View->LastContentArea.x || contentArea.y != GlobalContext.View->LastContentArea.y || contentArea.width != GlobalContext.View->LastContentArea.width || contentArea.height != GlobalContext.View->LastContentArea.height)
         {
-            lastContentArea = contentArea;
-            view.ResizeContentArea(lastContentArea);
+            GlobalContext.View->LastContentArea = contentArea;
+            GlobalContext.View->ResizeContentArea(GlobalContext.View->LastContentArea);
         }
 
         ui.Update();
-        view.Update();
+        GlobalContext.View->Update();
 
         BeginDrawing();
         ClearBackground(DARKGRAY);
 
-        view.Show(lastContentArea);
+        GlobalContext.View->Show(GlobalContext.View->LastContentArea);
 
         BeginRLImGui();
-        ui.Show(&view);
+        ui.Show(GlobalContext.View);
         EndRLImGui();
 
         EndDrawing();
     }
-    view.Shutdown();
+    GlobalContext.View->Shutdown();
     ui.Shutdown();
+
+    delete(GlobalContext.View);
+    GlobalContext.View = nullptr;
 
     ApplicationShutdown();
 

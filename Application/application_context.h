@@ -1,5 +1,7 @@
 #pragma once
 
+#include "main_view.h"
+
 #include "imgui.h"
 
 #include <vector>
@@ -8,6 +10,7 @@
 struct ApplicationContext
 {
     bool Quit = false;
+    MainView* View = nullptr;
 };
 
 extern ApplicationContext GlobalContext;
