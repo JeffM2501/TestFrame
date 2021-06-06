@@ -68,4 +68,6 @@ private:
     std::deque<LogSink::LogItem> LogLines;
 
     int ShowLevel = 0;
+
+    char FilterText[512] = { 0 };
 };

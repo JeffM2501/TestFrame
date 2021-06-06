@@ -141,7 +141,7 @@ namespace LogSink
     void GetLogLevelPrefix(int logLevel, LogItem& item)
     {
         item.Prefix = GetLogLevelName(logLevel);
-        item.Prefix == ": ";
+        item.Prefix += ": ";
         switch (logLevel)
         {
         default:            item.Prefix.clear(); item.Color = ImGuiColors::Convert(WHITE); break;

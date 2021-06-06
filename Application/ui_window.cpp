@@ -29,6 +29,7 @@
 **********************************************************************************************/
 
 #include "application_context.h"
+#include "common_utils.h"
 #include "ui_window.h"
 
 #include "imgui.h"
@@ -63,7 +64,6 @@ LogWindow::LogWindow() : UIWindow()
     Name = LogWindowName;
 }
 
-
 void LogWindow::OnShow(MainView*)
 {
     ImGui::TextUnformatted("Show:");
@@ -82,6 +82,10 @@ void LogWindow::OnShow(MainView*)
         }
         ImGui::EndCombo();
     }
+
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(200);
+    ImGui::InputTextWithHint("###filterText", "Filter", FilterText, 512);
 
     if (ImGui::BeginChild("###LogChild", ImGui::GetContentRegionAvail()))
     {
@@ -102,6 +106,12 @@ void LogWindow::OnShow(MainView*)
         {
             if (ShowLevel != 0 && ShowLevel != line.Level)
                 continue;
+
+            if (FilterText[0] != '\0')
+            {
+                if (StringUtils::stristr(line.Text.c_str(), FilterText) == nullptr)
+                    continue;
+            }
 
             ImGui::TextColored(line.Color, "%s", line.Prefix.c_str());
             ImGui::SameLine();

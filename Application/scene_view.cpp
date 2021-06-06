@@ -64,9 +64,9 @@ void SceneView::Show(const Rectangle& contentArea)
         return;
 
     if (IsMouseButtonPressed(1))
-        Camera.UseMouseX = Camera.UseMouseY = (IsMouseButtonDown(1) && CheckCollisionPointRec(GetMousePosition(), contentArea));
+        Camera.UseKeyboard = Camera.UseMouseX = Camera.UseMouseY = (IsMouseButtonDown(1) && CheckCollisionPointRec(GetMousePosition(), contentArea));
     else if (!IsMouseButtonDown(1))
-        Camera.UseMouseX = Camera.UseMouseY = false;
+        Camera.UseKeyboard = Camera.UseMouseX = Camera.UseMouseY = false;
 
     Camera.Update();
 
