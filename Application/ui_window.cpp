@@ -63,28 +63,54 @@ LogWindow::LogWindow() : UIWindow()
     Name = LogWindowName;
 }
 
+
 void LogWindow::OnShow(MainView*)
 {
-    bool scroollBottom = false;
-
-    LogSink::LogItem item;
-    if (LogSink::PopLogLine(item))
+    ImGui::TextUnformatted("Show:");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(150);
+    if (ImGui::BeginCombo("##LogLevel", LogSink::GetLogLevelName(ShowLevel)))
     {
-        LogLines.emplace_back(std::move(item));
+        for (int i = 0; i < LOG_NONE; ++i)
+        {
+            bool is_selected = i == ShowLevel;
+            if (ImGui::Selectable(LogSink::GetLogLevelName(i), is_selected))
+                ShowLevel = i;
 
-        while (LogLines.size() > 50)
-            LogLines.pop_front();
-
-        scroollBottom = true;
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
     }
 
-    for (auto& line : LogLines)
+    if (ImGui::BeginChild("###LogChild", ImGui::GetContentRegionAvail()))
     {
-        ImGui::TextColored(line.Color, "%s", line.Prefix.c_str());
-        ImGui::SameLine();
-        ImGui::TextUnformatted(line.Text.c_str());
-    }
+        bool scroollBottom = false;
 
-    if (scroollBottom)
-        ImGui::SetScrollHereY(1.0f);
+        LogSink::LogItem item;
+        if (LogSink::PopLogLine(item))
+        {
+            LogLines.emplace_back(std::move(item));
+
+            while (LogLines.size() > 50)
+                LogLines.pop_front();
+
+            scroollBottom = true;
+        }
+
+        for (auto& line : LogLines)
+        {
+            if (ShowLevel != 0 && ShowLevel != line.Level)
+                continue;
+
+            ImGui::TextColored(line.Color, "%s", line.Prefix.c_str());
+            ImGui::SameLine();
+            ImGui::TextUnformatted(line.Text.c_str());
+        }
+
+        if (scroollBottom)
+            ImGui::SetScrollHereY(1.0f);
+
+        ImGui::EndChild();
+    }
 }

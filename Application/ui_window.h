@@ -66,4 +66,6 @@ public:
 
 private:
     std::deque<LogSink::LogItem> LogLines;
+
+    int ShowLevel = 0;
 };

@@ -49,6 +49,7 @@ namespace LogSink
 {
     struct LogItem
     {
+        int Level = 0;
         std::string Prefix;
         std::string Text;
         ImVec4 Color = { 1,1,1,1 };
@@ -57,4 +58,18 @@ namespace LogSink
     void Setup();
     bool PopLogLine(LogItem& line);
     void Flush();
+
+    inline const char* GetLogLevelName(int logLevel)
+    {
+        switch (logLevel)
+        {
+        default:            return "All";
+        case LOG_TRACE:     return "Trace";
+        case LOG_DEBUG:     return "DEBUG";
+        case LOG_INFO:      return "Info";
+        case LOG_WARNING:   return "Warning";
+        case LOG_ERROR:     return "ERROR";
+        case LOG_FATAL:     return "FATAL";
+        }
+    }
 }

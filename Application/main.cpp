@@ -140,15 +140,17 @@ namespace LogSink
 
     void GetLogLevelPrefix(int logLevel, LogItem& item)
     {
+        item.Prefix = GetLogLevelName(logLevel);
+        item.Prefix == ": ";
         switch (logLevel)
         {
-        default:            item.Prefix = "";           item.Color = ImGuiColors::Convert(WHITE); break;
-        case LOG_TRACE:     item.Prefix = "Trace: ";    item.Color = ImGuiColors::Convert(GRAY); break;
-        case LOG_DEBUG:     item.Prefix = "DEBUG: ";    item.Color = ImGuiColors::Convert(SKYBLUE); break;
-        case LOG_INFO:      item.Prefix = "Info: ";     item.Color = ImGuiColors::Convert(GREEN); break;
-        case LOG_WARNING:   item.Prefix = "Warning: ";  item.Color = ImGuiColors::Convert(YELLOW); break;
-        case LOG_ERROR:     item.Prefix = "ERROR: ";    item.Color = ImGuiColors::Convert(ORANGE); break;
-        case LOG_FATAL:     item.Prefix = "FATAL: ";    item.Color = ImGuiColors::Convert(RED); break;
+        default:            item.Prefix.clear(); item.Color = ImGuiColors::Convert(WHITE); break;
+        case LOG_TRACE:     item.Color = ImGuiColors::Convert(GRAY); break;
+        case LOG_DEBUG:     item.Color = ImGuiColors::Convert(SKYBLUE); break;
+        case LOG_INFO:      item.Color = ImGuiColors::Convert(GREEN); break;
+        case LOG_WARNING:   item.Color = ImGuiColors::Convert(YELLOW); break;
+        case LOG_ERROR:     item.Color = ImGuiColors::Convert(ORANGE); break;
+        case LOG_FATAL:     item.Color = ImGuiColors::Convert(RED); break;
         }
     }
 
@@ -156,7 +158,7 @@ namespace LogSink
     {
         static char logText[2048] = { 0 };
         LogItem item;
-
+        item.Level = logLevel;
         GetLogLevelPrefix(logLevel, item);
         vsprintf_s(logText, text, args);
         item.Text += logText;
