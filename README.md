@@ -8,13 +8,15 @@ The idea is you add code to places in the test frame to get something showing qu
 
 ## Building
 
-1) Make sure you have the submodules
-2) Make sure that you have ImGui in raylibExtras/imgui
-	A) be sure to use the docking branch of ImGui from https://github.com/ocornut/imgui/tree/docking
-3) Get the premake5 for your platform
-4) Run premake
-	A) A batch file for visual studio 2019 is included
-5) Build
+1. Make sure you have the submodules
+2. Make sure that you have ImGui in raylibExtras/imgui
+    1. Be sure to use the docking branch of ImGui
+    2. Download from https://github.com/ocornut/imgui/tree/docking
+3. Get the premake5 for your platform
+4. Run premake
+    1. Batch file for visual studio 2019 is included
+    2. Other targets will need the command line (premake5 gmake)
+5. Build
 
 
 # What this does
