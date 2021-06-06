@@ -34,6 +34,8 @@ private:
     bool ShowStyleEditor = false;
     bool ShowDemoWindow = false;
     bool ShowMetricsWindow = false;
+    bool ShowAboutImGuiWindow = false;
+    bool ShowAboutWindow = false;
 
     Rectangle ContentArea = { 0 };
 

@@ -23,6 +23,7 @@ void ApplicationStartup();
 void ApplicationShutdown();
 
 bool ShowStartupLog = true;
+bool Start2D = false;
 
 #ifdef _WIN32
 int wWinMain(void* hInstance, void* hPrevInstance, char* cmdLine, int show)
@@ -34,15 +35,17 @@ int main(int argc, char* argv[])
 
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
     InitWindow(1280, 720, "TestBed Application");
-    SetupRLImGui(true);
-
+   
     ApplicationStartup();
 
     UIManager ui;
     SceneView sceneView;
     SpriteView spriteView;
 
-    GlobalContext.View = new SpriteView();
+    if (Start2D)
+        GlobalContext.View = new SpriteView();
+    else
+        GlobalContext.View = new SceneView();
 
     ui.Startup();
 
@@ -94,6 +97,11 @@ void ApplicationStartup()
     TraceLog(LOG_INFO, "Testbed Startup");
 
     rlas_SetAssetRootPath("resources/",false);
+
+    InitRLGLImGui();
+
+    // load fonts here
+    FinishRLGLImguSetup();
 }
 
 void ApplicationShutdown()

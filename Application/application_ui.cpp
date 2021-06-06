@@ -4,8 +4,11 @@
 #include "sprite_view.h"
 #include "inspector_window.h"
 
+#include "RLAssets.h"
 #include "raylib.h"
+#include "rlImGui.h"
 #include "imgui_internal.h"
+
 
 void UIManager::Startup()
 {
@@ -13,6 +16,8 @@ void UIManager::Startup()
     ImGui::GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
 
     ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_Right;
+
+    ImGui::StyleColorsDark();
 
     Windows.emplace_back(std::make_shared<LogWindow>());
     Windows.emplace_back(std::make_shared<InspectorWindow>());
@@ -99,6 +104,7 @@ void UIManager::SetupUI()
 
 void UIManager::ShowMenu()
 {
+    bool openAbout = false;
     if (ImGui::BeginMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -151,12 +157,35 @@ void UIManager::ShowMenu()
                 ImGui::MenuItem("Style Editor", nullptr, &ShowStyleEditor);
                 ImGui::MenuItem("Metrics", nullptr, &ShowMetricsWindow);
                 ImGui::MenuItem("Demo", nullptr, &ShowDemoWindow);
+                if (ImGui::MenuItem("About"))
+                    ShowAboutImGuiWindow = true;
 
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
+        if (ImGui::BeginMenu("Help"))
+        {
+            if (ImGui::MenuItem("About"))
+                openAbout = true;
+
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenuBar();
+
+        if (openAbout)
+            ImGui::OpenPopup("About Testbed");
+
+        if (ImGui::BeginPopupModal("About Testbed", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::TextUnformatted("Raylib Testbed Copyright 2021 Jeffery Myers");
+            ImGui::TextUnformatted("A testbed for trying out things in raylib and Dear ImGui");
+            if (ImGui::Button("Ok"))
+                ImGui::CloseCurrentPopup();
+
+            ImGui::EndPopup();
+        }
     }
 }
 
@@ -178,4 +207,7 @@ void UIManager::ShowDebugWindows()
 
     if (ShowDemoWindow)
         ImGui::ShowDemoWindow(&ShowDemoWindow);
+
+    if (ShowAboutImGuiWindow)
+        ImGui::ShowAboutWindow(&ShowAboutImGuiWindow);
 }

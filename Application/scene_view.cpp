@@ -33,7 +33,11 @@ void SceneView::Show(const Rectangle& contentArea)
     if (SceneTexture.texture.id == 0)
         return;
 
-    Camera.UseMouseX = Camera.UseMouseY = (IsMouseButtonDown(1) && CheckCollisionPointRec(GetMousePosition(), contentArea));
+    if (IsMouseButtonPressed(1))
+        Camera.UseMouseX = Camera.UseMouseY = (IsMouseButtonDown(1) && CheckCollisionPointRec(GetMousePosition(), contentArea));
+    else if (!IsMouseButtonDown(1))
+        Camera.UseMouseX = Camera.UseMouseY = false;
+
     Camera.Update();
 
     BeginTextureMode(SceneTexture);
