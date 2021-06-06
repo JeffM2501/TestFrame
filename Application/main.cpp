@@ -11,9 +11,9 @@
 #include "scene_view.h"
 #include "sprite_view.h"
 
-#include "rlImGui.h"
 #include "raylib.h"
 #include "rlImGui.h"
+#include "RLAssets.h"
 
 #include <deque>
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     SceneView sceneView;
     SpriteView spriteView;
 
-    GlobalContext.View = new SceneView();
+    GlobalContext.View = new SpriteView();
 
     ui.Startup();
 
@@ -92,10 +92,13 @@ void ApplicationStartup()
         LogSink::Flush();
 
     TraceLog(LOG_INFO, "Testbed Startup");
+
+    rlas_SetAssetRootPath("resources/",false);
 }
 
 void ApplicationShutdown()
 {
+    rlas_Cleanup();
     LogSink::Flush();
 }
 

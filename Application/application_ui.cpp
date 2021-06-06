@@ -7,7 +7,6 @@
 #include "raylib.h"
 #include "imgui_internal.h"
 
-
 void UIManager::Startup()
 {
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -72,12 +71,13 @@ void UIManager::Show(MainView* view)
         }
         ShowDebugWindows();
         ShowMenu();
-        ImGui::End();
+ 
     }
     else
     {
         ImGui::PopStyleVar();
     }
+    ImGui::End();
 }
 
 void UIManager::Update()
@@ -111,14 +111,17 @@ void UIManager::ShowMenu()
 
         if (ImGui::BeginMenu("Views"))
         {
-            if (ImGui::MenuItem("3d View"))
+            bool is3d = GlobalContext.View->Is3D();
+
+            if (ImGui::MenuItem("3d View", nullptr, &is3d, !is3d))
             {
                 GlobalContext.View->Shutdown();
                 delete(GlobalContext.View);
                 GlobalContext.View = new SceneView();
             }
 
-            if (ImGui::MenuItem("2d View"))
+            bool is2d = !GlobalContext.View->Is3D();
+            if (ImGui::MenuItem("2d View", nullptr, &is2d, is3d))
             {
                 GlobalContext.View->Shutdown();
                 delete(GlobalContext.View);
@@ -165,8 +168,9 @@ void UIManager::ShowDebugWindows()
         if (ImGui::Begin("Style Editor", &ShowStyleEditor))
         {
             ImGui::ShowStyleEditor(&style);
-            ImGui::End();
+            
         }
+        ImGui::End();
     }
 
     if (ShowMetricsWindow)

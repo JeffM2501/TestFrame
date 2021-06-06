@@ -3,7 +3,7 @@
 
 SpriteView::SpriteView() : MainView()
 {
-    Tx = LoadTexture("resources/parrots.png");
+    Tx = LoadTexture("parrots.png");
 }
 
 void SpriteView::Shutdown()

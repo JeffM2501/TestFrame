@@ -15,9 +15,11 @@ public:
 
     virtual void Shutdown();
 
-    inline virtual const char* GetViewName() { return nullptr; }
-    inline virtual Vector3 GetViewPos() { return Vector3{ 0,0,0 }; }
-    inline virtual Vector2 GetViewOrientation() { return Vector2{ 0,0 }; }
+    inline virtual const char* GetViewName() const { return nullptr; }
+    inline virtual Vector3 GetViewPos() const { return Vector3{ 0,0,0 }; }
+    inline virtual Vector2 GetViewOrientation() const { return Vector2{ 0,0 }; }
+
+    inline virtual bool Is3D() const { return false; }
 
 public:
     Rectangle LastContentArea = { 0 };

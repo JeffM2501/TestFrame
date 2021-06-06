@@ -104,7 +104,7 @@ void SceneView::DrawDefaultScene()
 
 void SceneView::SetupSkybox()
 {
-    Image skyImg = LoadImage("resources/Daylight Box UV.png");
+    Image skyImg = LoadImage("Daylight Box UV.png");
     SkyboxTexture = LoadTextureCubemap(skyImg, CUBEMAP_LAYOUT_AUTO_DETECT);
     UnloadImage(skyImg);
 
@@ -112,7 +112,7 @@ void SceneView::SetupSkybox()
 
     int val = MATERIAL_MAP_CUBEMAP;
     // Load skybox shader and set options in required locations
-    SetModelMaterialShader(&Skybox, 0, LoadShaderSet("resources/shaders", "skybox"));
+    SetModelMaterialShader(&Skybox, 0, LoadShaderSet("shaders", "skybox"));
     SetModelMaterialShaderValue(&Skybox, 0, "environmentMap", &val, SHADER_UNIFORM_INT);
     val = 1;
     SetModelMaterialShaderValue(&Skybox, 0, "noGamma", &val, SHADER_UNIFORM_INT);

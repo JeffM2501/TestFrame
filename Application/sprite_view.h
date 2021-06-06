@@ -13,7 +13,7 @@ public:
     virtual void Show(const Rectangle& contentArea);
     void ResizeContentArea(const Rectangle& contentArea) override;
 
-    const char* GetViewName() override { return "2D View"; }
+    const char* GetViewName() const override { return "2D View"; }
 
 protected:
     virtual void OnShow(const Rectangle& contentArea);

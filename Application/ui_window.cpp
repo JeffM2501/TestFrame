@@ -10,8 +10,8 @@ void UIWindow::Show(MainView* view)
         if (ImGui::Begin(Name.c_str(), &Shown, ImGuiWindowFlags_None))
         {
             OnShow(view);
-            ImGui::End();
         }
+        ImGui::End();
     }
 }
 

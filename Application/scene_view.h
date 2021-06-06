@@ -14,9 +14,11 @@ public:
 
     void Shutdown() override;
 
-    const char* GetViewName() override { return "Scene View"; }
-    Vector3 GetViewPos() override { return Camera.GetCameraPosition(); }
-    Vector2 GetViewOrientation() override { return Camera.GetViewAngles(); }
+    inline const char* GetViewName() const override { return "Scene View"; }
+    inline Vector3 GetViewPos() const override { return Camera.GetCameraPosition(); }
+    inline Vector2 GetViewOrientation() const override { return Camera.GetViewAngles(); }
+
+    inline bool Is3D() const override { return true; }
 
 protected:
     void OnShow(const Rectangle& contentArea) override;
