@@ -25,7 +25,7 @@ The idea is you add code to places in the test frame to get something showing qu
 The testframe has two main concepts Views and Windows. Each exist to display data and work with each other.
 
 # Viws
-Views are shown in the background window in the area that is not covered by docked windows. There is only ever one view up at a time. Each View uses a render texture so you can draw to it as if it was a little screen. Views are based on the MainView class and have an OnShow virtual method where you can put drawing code. You can have as many view types as you want and setup the View menu to swap between them.
+Views are shown in the background window in the area that is not covered by docked windows. There is only ever one view up at a time. Each View uses a render texture so you can draw to it as if it was a little screen. A rectangle is passed to the view for the vissible area. Views are based on the MainView class and have an OnShow virtual method where you can put drawing code. You can have as many view types as you want and setup the View menu to swap between them.
 
 ## SceneView
 This is the default view and is 3d. It sets up a first person camera, skybox and ground grid by default.
@@ -42,6 +42,8 @@ This shows the raylib log output. Has filters for type and by text to search for
 ## Inspector
 This shows data from the view. It is meant to be exteneed with more info.
 
+# Other services
+Testframe is setup with RLAssets, FPCamera, TPCamera and other items from RaylibExtras. There are also several utilities to help with drawing in draw_utils.h
 
 # Tools
 The tools menu has several things to help debug ImGui.
