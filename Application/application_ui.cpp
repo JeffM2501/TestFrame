@@ -30,15 +30,17 @@
 
 #include "application_context.h"
 #include "application_ui.h"
+#include "common_utils.h"
 #include "scene_view.h"
 #include "sprite_view.h"
 #include "inspector_window.h"
+#include "platform_tools.h"
 
 #include "RLAssets.h"
 #include "raylib.h"
+#include "rlgl.h"
 #include "rlImGui.h"
 #include "imgui_internal.h"
-
 
 void UIManager::Startup()
 {
@@ -139,6 +141,8 @@ void UIManager::SetupUI()
 void UIManager::ShowMenu()
 {
     bool openAbout = false;
+    bool copyScreenshot = false;
+
     if (ImGui::BeginMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -196,6 +200,18 @@ void UIManager::ShowMenu()
 
                 ImGui::EndMenu();
             }
+            ImGui::Separator();
+
+            if (ImGui::BeginMenu("Screenshot"))
+            {
+                if (ImGui::MenuItem("Take Screenshot"))
+                    GlobalContext.TakeScreenshot = true;
+
+                if (ImGui::MenuItem("Copy Screenshot", "Ctl+Alt+C"))
+                    GlobalContext.CopyScreenshot = true;
+
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help"))
@@ -220,6 +236,16 @@ void UIManager::ShowMenu()
 
             ImGui::EndPopup();
         }
+    }
+
+    if (copyScreenshot || (IsKeyPressed(KEY_C) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) && (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))))
+    {
+        unsigned char* imgData = rlReadScreenPixels(GetScreenWidth(), GetScreenHeight());
+        Image image = { imgData, GetScreenWidth(), GetScreenHeight(), 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
+
+        PlatformTools::CopyImageToClipboard(image);
+
+        RL_FREE(imgData);
     }
 }
 

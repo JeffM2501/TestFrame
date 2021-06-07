@@ -92,13 +92,37 @@ project "rlImGui"
 	includedirs { "raylib/src","raylibExtras/rlImGui", "raylibExtras/imGui"}
 	vpaths 
 	{
-		["Header Files"] = { "rraylibExtras/lImGui/**.h"},
+		["Header Files"] = { "raylibExtras/lImGui/**.h"},
 		["Source Files"] = {"raylibExtras/rlImGui/**.cpp"},
 		["ImGui Files"] = { "raylibExtras/imGui/*.h","raylibExtras/imGui/*.cpp" },
 	}
 	files {"raylibExtras/imGui/*.h", "raylibExtras/imGui/*.cpp", "raylibExtras/rlImGui/**.cpp", "raylibExtras/rlImGui/**.h"}
-
+    
+project "clip"
+	kind "StaticLib"
+		
+	filter "action:vs*"
+		defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS", "_WIN32"}
+				
+	filter{}
 	
+	location "clip/"
+	language "C++"
+	targetdir "bin/%{cfg.buildcfg}"
+	
+	includedirs { "clip"}
+	vpaths 
+	{
+		["Header Files"] = { "clip/**.h"},
+		["Source Files"] = {"clip/**.cpp"},
+	}
+    
+    files {"clip/*.h", "clip/image.cpp", "clip/clip.cpp"}
+	filter "action:vs*"
+        files {"clip/clip_win.cpp"}
+    filter "action:gmake*"
+        files {"clip/clip_x11.cpp"}
+
 project "Application"
 	kind "WindowedApp"
 	location "./"
@@ -114,15 +138,16 @@ project "Application"
 	}
 	files {"Application/**.c", "Application/**.cpp", "Application/**.h"}
 
-	links {"raylib", "rlExtrasCPP", "rlImGui"}
+	links {"raylib", "rlExtrasCPP", "rlImGui", "clip"}
 	
-	includedirs { "%{wks.name}", "raylib/src", "raylibExtras/rlExtrasCPP",  "raylibExtras/rlImGui", "raylibExtras/imGui"}
+	includedirs { "%{wks.name}", "raylib/src", "raylibExtras/rlExtrasCPP",  "raylibExtras/rlImGui", "raylibExtras/imGui", "clip"}
+    
 	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
 	
 	filter "action:vs*"
 		defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS", "_WIN32"}
 		dependson {"raylib"}
-		links {"winmm", "raylib.lib", "kernel32"}
+		links {"winmm", "raylib.lib", "kernel32","	Shlwapi"}
 		libdirs {"bin/%{cfg.buildcfg}"}
 		
 	filter "action:gmake*"

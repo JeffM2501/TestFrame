@@ -32,10 +32,13 @@
 #include "application_ui.h"
 #include "main_view.h"
 
+#include "platform_tools.h"
+
 #include "scene_view.h"
 #include "sprite_view.h"
 
 #include "raylib.h"
+#include "rlgl.h"
 #include "rlImGui.h"
 #include "RLAssets.h"
 
@@ -100,6 +103,24 @@ int main(int argc, char* argv[])
         EndRLImGui();
 
         EndDrawing();
+
+        if (GlobalContext.CopyScreenshot)
+        {
+            GlobalContext.CopyScreenshot = false;
+            unsigned char* imgData = rlReadScreenPixels(GetScreenWidth(), GetScreenHeight());
+            Image image = { imgData, GetScreenWidth(), GetScreenHeight(), 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
+
+            PlatformTools::CopyImageToClipboard(image);
+
+            RL_FREE(imgData);
+            TraceLog(LOG_INFO, "Copied Screenshot to Clipboard");
+        }
+
+        if (GlobalContext.TakeScreenshot)
+        {
+            GlobalContext.TakeScreenshot = false;
+            TakeScreenshot(TextFormat("%d.png", GetRandomValue(1, 999999999)));
+        }
     }
     GlobalContext.View->Shutdown();
     ui.Shutdown();

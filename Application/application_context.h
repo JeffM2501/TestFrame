@@ -41,6 +41,9 @@ struct ApplicationContext
 {
     bool Quit = false;
     MainView* View = nullptr;
+
+    bool TakeScreenshot = false;
+    bool CopyScreenshot = false;
 };
 
 extern ApplicationContext GlobalContext;

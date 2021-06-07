@@ -30,57 +30,17 @@
 
 #pragma once
 
-#include <ctype.h>
+#include "raylib.h"
 
-namespace Base64
+namespace PlatformTools
 {
-    size_t GetSize(const char* input);
-    void* Decode(const char* input, size_t* size);
-    void FreeBuffer(void* buffer);
-    char* Encode(const void* input, size_t len);
-}
-
-namespace StringUtils
-{
-    inline char* stristr(const char* str1, const char* str2)
+    enum class ClipboardFormats
     {
-        const char* p1 = str1;
-        const char* p2 = str2;
-        const char* r = *p2 == 0 ? str1 : 0;
+        Text,
+        PNG,
+    };
 
-        while (*p1 != 0 && *p2 != 0)
-        {
-            if (tolower((unsigned char)*p1) == tolower((unsigned char)*p2))
-            {
-                if (r == 0)
-                {
-                    r = p1;
-                }
+    void CopyImageToClipboard(Image& image);
 
-                p2++;
-            }
-            else
-            {
-                p2 = str2;
-                if (r != 0)
-                {
-                    p1 = r + 1;
-                }
-
-                if (tolower((unsigned char)*p1) == tolower((unsigned char)*p2))
-                {
-                    r = p1;
-                    p2++;
-                }
-                else
-                {
-                    r = 0;
-                }
-            }
-
-            p1++;
-        }
-
-        return *p2 == 0 ? (char*)r : 0;
-    }
+    void SetWindowHandle(void* handle);
 }

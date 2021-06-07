@@ -50,9 +50,9 @@ namespace Base64
         49, 50, 51
     };
 
-    int GetSize(const char* input)
+    size_t GetSize(const char* input)
     {
-        int size = 0;
+        size_t size = 0;
 
         for (int i = 0; input[4 * i] != 0; i++)
         {
@@ -69,14 +69,70 @@ namespace Base64
     
     void FreeBuffer(void* buffer)
     {
-        MemFree(buffer);
+        delete[] (buffer);
     }
 
-    void* Decode(const char* input, int* size)
+    const char b64chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    size_t EncodedSize(size_t inlen)
+    {
+        size_t ret;
+
+        ret = inlen;
+        if (inlen % 3 != 0)
+            ret += 3 - (inlen % 3);
+        ret /= 3;
+        ret *= 4;
+
+        return ret;
+    }
+
+   char* Encode(const void* buffer, size_t len)
+    {
+        const char* in = static_cast<const char*>(buffer);
+        char* out = nullptr;
+        size_t  elen = 0;
+        size_t  i = 0;
+        size_t  j = 0;
+        size_t  v = 0;
+
+        if (in == NULL || len == 0)
+            return NULL;
+
+        elen = EncodedSize(len);
+        out = new char[elen + 1];
+
+        out[elen] = '\0';
+
+        for (i = 0, j = 0; i < len; i += 3, j += 4) {
+            v = in[i];
+            v = i + 1 < len ? v << 8 | in[i + 1] : v << 8;
+            v = i + 2 < len ? v << 8 | in[i + 2] : v << 8;
+
+            out[j] = b64chars[(v >> 18) & 0x3F];
+            out[j + 1] = b64chars[(v >> 12) & 0x3F];
+            if (i + 1 < len) {
+                out[j + 2] = b64chars[(v >> 6) & 0x3F];
+            }
+            else {
+                out[j + 2] = '=';
+            }
+            if (i + 2 < len) {
+                out[j + 3] = b64chars[v & 0x3F];
+            }
+            else {
+                out[j + 3] = '=';
+            }
+        }
+
+        return out;
+    }
+
+    void* Decode(const char* input, size_t* size)
     {
         *size = GetSize(input);
 
-        unsigned char* buf = (unsigned char*)MemAlloc(*size);
+        unsigned char* buf = (unsigned char*)new char[*size];
         for (int i = 0; i < *size / 3; i++)
         {
             unsigned char a = base64Table[(int)input[4 * i]];
