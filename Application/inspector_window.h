@@ -32,6 +32,7 @@
 
 #include "ui_window.h"
 
+#include "raylib.h"
 #include "rlImGui.h"
 #include "raylib.h"
 
@@ -44,6 +45,41 @@ namespace Inspectors
         float height = width * (texture.height / (float)texture.width);
         RLImGuiImageSize(&texture, (int)width, (int)height);
         ImGui::Text("ID:%d W:%d H:%d", texture.id, texture.width, texture.height);
+        if (texture.mipmaps > 1)
+            ImGui::Text("Mipmap Levels:%d", texture.mipmaps);
+    }
+
+    inline void ShowSetTextureFilter(const Texture& texture)
+    {
+
+        if (ImGui::Button("Point"))
+            SetTextureFilter(texture, TEXTURE_FILTER_POINT);
+        
+        ImGui::SameLine();
+        if (ImGui::Button("Bi"))
+            SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
+
+        ImGui::SameLine(); 
+        if (ImGui::Button("Tri"))
+            SetTextureFilter(texture, TEXTURE_FILTER_TRILINEAR);
+
+        ImGui::SameLine(); 
+        if (ImGui::Button("A4x"))
+            SetTextureFilter(texture, TEXTURE_FILTER_ANISOTROPIC_4X);
+
+        ImGui::SameLine(); 
+        if (ImGui::Button("A8x"))
+            SetTextureFilter(texture, TEXTURE_FILTER_ANISOTROPIC_8X);
+
+        ImGui::SameLine(); 
+        if (ImGui::Button("A16x"))
+            SetTextureFilter(texture, TEXTURE_FILTER_ANISOTROPIC_16X);
+
+
+        ImGui::SameLine();
+        if (ImGui::Button("Mip"))
+            GenTextureMipmaps((Texture*)&texture);
+
     }
 }
 
@@ -102,6 +138,7 @@ public:
 
             ImGui::TextUnformatted("Texture");
             Inspectors::ShowTextureInspector(sView->Tx);
+            Inspectors::ShowSetTextureFilter(sView->Tx);
         }
     }
 };

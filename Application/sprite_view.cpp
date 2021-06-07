@@ -35,6 +35,7 @@
 SpriteView::SpriteView() : MainView()
 {
     Tx = LoadTexture("parrots.png");
+    SetTextureFilter(Tx, TEXTURE_FILTER_TRILINEAR);
     Camera.zoom = 1;
 }
 
@@ -69,21 +70,32 @@ void SpriteView::Show(const Rectangle& contentArea)
 
     if (CheckCollisionPointRec(GetMousePosition(), contentArea))
     {
-        if (GetMouseWheelMove() < 0)
+        if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_LEFT_SHIFT))
         {
-            ZoomLevel--;
-            if (ZoomLevel < 0)
-                ZoomLevel = 0;
+            Camera.zoom += GetMouseWheelMove() * 0.05f;
+            if (Camera.zoom <= 0)
+                Camera.zoom = 0.05f;
         }
-        else if (GetMouseWheelMove() > 0)
+        else
         {
-            ZoomLevel++;
-            if (ZoomLevel >= MaxZoomLevels)
-                ZoomLevel = MaxZoomLevels -1;
+            if (GetMouseWheelMove() < 0)
+            {
+                ZoomLevel--;
+                if (ZoomLevel < 0)
+                    ZoomLevel = 0;
+            }
+            else if (GetMouseWheelMove() > 0)
+            {
+                ZoomLevel++;
+                if (ZoomLevel >= MaxZoomLevels)
+                    ZoomLevel = MaxZoomLevels - 1;
+            }
+
+            if (GetMouseWheelMove() != 0)
+                Camera.zoom = ZoomLevels[ZoomLevel];
+
         }
 
-        Camera.zoom = ZoomLevels[ZoomLevel];
-        
     }
 
     BeginTextureMode(SceneTexture);
@@ -122,5 +134,5 @@ void SpriteView::OnShow(const Rectangle& contentArea)
     DrawTexture(Tx, Tx.width/-2, Tx.height/-2, Colors::White);
     EndMode2D();
 
-    DrawText(TextFormat("Zoom:%.1f%%", ZoomLevels[ZoomLevel] * 100), 0, (int)contentArea.height - 20, 20, Colors::White);
+    DrawText(TextFormat("Zoom:%.1f%%", Camera.zoom * 100), 0, (int)contentArea.height - 20, 20, Colors::White);
 }
