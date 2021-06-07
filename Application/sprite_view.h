@@ -35,6 +35,9 @@
 class SpriteView : public MainView 
 {
 public:
+    Texture Tx;
+
+public:
     SpriteView();
 
     virtual void Shutdown();
@@ -57,8 +60,6 @@ protected:
     bool Dragging = false;
     Vector2 ClickPos = { 0,0 };
     Vector2 ClickTarget = { 0,0 };
-
-    Texture Tx;
 
     static const int MaxZoomLevels = 14;
     float ZoomLevels[MaxZoomLevels] = { 0.125f, 0.25f, 0.5f, 1, 1.5f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f };

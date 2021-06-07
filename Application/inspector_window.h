@@ -32,7 +32,20 @@
 
 #include "ui_window.h"
 
+#include "rlImGui.h"
 #include "raylib.h"
+
+
+namespace Inspectors
+{
+    inline void ShowTextureInspector(const Texture& texture)
+    {
+        float width = ImGui::GetContentRegionAvailWidth();
+        float height = width * (texture.height / (float)texture.width);
+        RLImGuiImageSize(&texture, (int)width, (int)height);
+        ImGui::Text("ID:%d W:%d H:%d", texture.id, texture.width, texture.height);
+    }
+}
 
 constexpr char InspectorWindowName[] = "Inspector###RaylibInspectorWindow";
 
@@ -45,7 +58,7 @@ public:
         Name = InspectorWindowName;
     }
 
-    void OnShow(MainView* view) override
+    inline void ShowCommonData(MainView* view)
     {
         float frameTime = GetFrameTime();
         float instantFPS = 0;
@@ -60,10 +73,35 @@ public:
         Vector2 mouse = GetMousePosition();
         ImGui::Text("Mouse X%.0f Y%.0f", mouse.x, mouse.y);
 
-        Vector3 camPos = view->GetViewPos();
-        ImGui::Text("%s", view->GetViewName());
-        ImGui::Text("X % .2f Y % .2f Z % .2f", camPos.x, camPos.y, camPos.z);
-        Vector2 camAngles = view->GetViewOrientation();
-        ImGui::Text("Yaw%.2f Pitch%.2f", camAngles.y, camAngles.x);
+        if (view->Is3D())
+        {
+
+            Vector3 camPos = view->GetViewPos();
+            ImGui::Text("%s", view->GetViewName());
+            ImGui::Text("X %.2f Y %.2f Z %.2f", camPos.x, camPos.y, camPos.z);
+            Vector2 camAngles = view->GetViewOrientation();
+            ImGui::Text("Yaw%.2f Pitch%.2f", camAngles.y, camAngles.x);
+        }
+        else
+        {
+            Vector3 camPos = view->GetViewPos();
+            ImGui::Text("%s", view->GetViewName());
+            ImGui::Text("X %.2f Y %.2f ", camPos.x, camPos.y);
+            Vector2 camAngles = view->GetViewOrientation();
+            ImGui::Text("Rotation%.2f", camAngles.x);
+        }
+    }
+
+    inline void OnShow(MainView* view) override
+    {
+        ShowCommonData(view);
+
+        if (!view->Is3D())
+        {
+            SpriteView* sView = reinterpret_cast<SpriteView*>(view);
+
+            ImGui::TextUnformatted("Texture");
+            Inspectors::ShowTextureInspector(sView->Tx);
+        }
     }
 };
