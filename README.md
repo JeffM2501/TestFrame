@@ -40,7 +40,7 @@ Windows are ImGui windows that are docked around the view. They are used to disp
 This shows the raylib log output. Has filters for type and by text to search for specific issues in the log.
 
 ## Inspector
-This shows data from the view. It is meant to be exteneed with more info.
+This shows data from the view. It is meant to be extended with more info.
 
 # Other services
 Testframe is setup with RLAssets, FPCamera, TPCamera and other items from RaylibExtras. There are also several utilities to help with drawing in draw_utils.h
