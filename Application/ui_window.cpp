@@ -87,6 +87,20 @@ void LogWindow::OnShow(MainView*)
     ImGui::SetNextItemWidth(200);
     ImGui::InputTextWithHint("###filterText", "Filter", FilterText, 512);
 
+    ImGui::SameLine();
+    bool copy = false;
+    if(ImGui::Button("Copy"))
+    {
+        copy = true;
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Clear"))
+    {
+        LogSink::Flush();
+        LogLines.clear();
+    }
+
     if (ImGui::BeginChild("###LogChild", ImGui::GetContentRegionAvail()))
     {
         bool scroollBottom = false;
@@ -102,6 +116,8 @@ void LogWindow::OnShow(MainView*)
             scroollBottom = true;
         }
 
+        std::string copyBuffer;
+
         for (auto& line : LogLines)
         {
             if (ShowLevel != 0 && ShowLevel != line.Level)
@@ -116,6 +132,16 @@ void LogWindow::OnShow(MainView*)
             ImGui::TextColored(line.Color, "%s", line.Prefix.c_str());
             ImGui::SameLine();
             ImGui::TextUnformatted(line.Text.c_str());
+
+            if (copy)
+            {
+                copyBuffer += line.Prefix + line.Text + "\r\n";
+            }
+        }
+
+        if (copy)
+        {
+            SetClipboardText(copyBuffer.c_str());
         }
 
         if (scroollBottom)
