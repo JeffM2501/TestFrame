@@ -35,6 +35,7 @@
 SpriteView::SpriteView() : MainView()
 {
     Tx = LoadTexture("parrots.png");
+    Camera.zoom = 1;
 }
 
 void SpriteView::Shutdown()
@@ -44,7 +45,18 @@ void SpriteView::Shutdown()
 
 void SpriteView::Update()
 {
+    if (IsMouseButtonPressed(1))
+    {
+        Dragging = true;
+        ClickPos = GetMousePosition();
+        ClickTarget = Camera.target;
+    }
 
+    if (IsMouseButtonDown(1))
+    {
+        Vector2 delta = Vector2Scale(Vector2Subtract(ClickPos, GetMousePosition()), 1.0f/ZoomLevels[ZoomLevel]);
+        Camera.target = Vector2Add(ClickTarget, delta);
+    }
 }
 
 void SpriteView::Show(const Rectangle& contentArea)
@@ -54,6 +66,25 @@ void SpriteView::Show(const Rectangle& contentArea)
 
     if (SceneTexture.texture.id == 0)
         return;
+
+    if (CheckCollisionPointRec(GetMousePosition(), contentArea))
+    {
+        if (GetMouseWheelMove() < 0)
+        {
+            ZoomLevel--;
+            if (ZoomLevel < 0)
+                ZoomLevel = 0;
+        }
+        else if (GetMouseWheelMove() > 0)
+        {
+            ZoomLevel++;
+            if (ZoomLevel >= MaxZoomLevels)
+                ZoomLevel = MaxZoomLevels -1;
+        }
+
+        Camera.zoom = ZoomLevels[ZoomLevel];
+        
+    }
 
     BeginTextureMode(SceneTexture);
     OnShow(contentArea);
@@ -75,6 +106,8 @@ void SpriteView::ResizeContentArea(const Rectangle& contentArea)
     if (contentArea.width == 0 || contentArea.height == 0)
         return;
 
+    Camera.offset = RectTools::CenterSize(contentArea);
+
     SceneTexture = LoadRenderTexture((int)contentArea.width, (int)contentArea.height);
     BeginTextureMode(SceneTexture);
     ClearBackground(Colors::Black);
@@ -84,6 +117,10 @@ void SpriteView::ResizeContentArea(const Rectangle& contentArea)
 void SpriteView::OnShow(const Rectangle& contentArea)
 {
     ClearBackground(Colors::DarkGray);
-    DrawUtils::DrawGrid2D(ScreenTools::Center(), (int)RectTools::MaxSize(contentArea), 100, Colors::Gray, Colors::DarkBlue);
-    DrawTexture(Tx, 100, 100, Colors::White);
+    BeginMode2D(Camera);
+    DrawUtils::DrawGrid2D(Vector2Zero(), (int)RectTools::MaxSize(contentArea)/2, 100, Colors::Gray, Colors::DarkBlue);
+    DrawTexture(Tx, Tx.width/-2, Tx.height/-2, Colors::White);
+    EndMode2D();
+
+    DrawText(TextFormat("Zoom:%.1f%%", ZoomLevels[ZoomLevel] * 100), 0, (int)contentArea.height - 20, 20, Colors::White);
 }

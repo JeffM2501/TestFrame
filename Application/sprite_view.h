@@ -44,12 +44,23 @@ public:
     void ResizeContentArea(const Rectangle& contentArea) override;
 
     const char* GetViewName() const override { return "2D View"; }
+    inline Vector3 GetViewPos() const override { return Vector3{ Camera.target.x, Camera.target.y, 0 }; }
+    inline Vector2 GetViewOrientation() const override { return Vector2{ Camera.rotation, 0 }; }
 
 protected:
     virtual void OnShow(const Rectangle& contentArea);
 
 protected:
     RenderTexture SceneTexture = { 0 };
+    Camera2D Camera = { 0 };
+
+    bool Dragging = false;
+    Vector2 ClickPos = { 0,0 };
+    Vector2 ClickTarget = { 0,0 };
 
     Texture Tx;
+
+    static const int MaxZoomLevels = 14;
+    float ZoomLevels[MaxZoomLevels] = { 0.125f, 0.25f, 0.5f, 1, 1.5f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f };
+    int ZoomLevel = 3;
 };

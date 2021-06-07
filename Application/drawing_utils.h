@@ -56,6 +56,11 @@ namespace RectTools
     {
         return std::max(rect.width, rect.height);
     }
+
+    inline Vector2 CenterSize(const Rectangle& rect)
+    {
+        return Vector2{ rect.width / 2,rect.height / 2 };
+    }
 }
 
 namespace ScreenTools

@@ -134,9 +134,7 @@ void LogWindow::OnShow(MainView*)
             ImGui::TextUnformatted(line.Text.c_str());
 
             if (copy)
-            {
                 copyBuffer += line.Prefix + line.Text + "\r\n";
-            }
         }
 
         if (copy)
