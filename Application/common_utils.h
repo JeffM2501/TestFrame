@@ -31,6 +31,27 @@
 #pragma once
 
 #include <ctype.h>
+#include "raylib.h"
+
+
+namespace MovementTools
+{
+    inline Vector2 GetWADSVector()
+    {
+        Vector2 result = { 0,0 };
+        if (IsKeyDown(KEY_W))
+            result.y = -GetFrameTime();
+        else if (IsKeyDown(KEY_S))
+            result.y = GetFrameTime();
+
+        if (IsKeyDown(KEY_D))
+            result.x = GetFrameTime();
+        else if (IsKeyDown(KEY_A))
+            result.x = -GetFrameTime();
+
+        return result;
+    }
+}
 
 namespace Base64
 {
