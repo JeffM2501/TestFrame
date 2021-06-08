@@ -45,6 +45,8 @@ struct ApplicationContext
     bool ScreenshotView = false;
     bool TakeScreenshot = false;
     bool CopyScreenshot = false;
+
+    static void Screenshot();
 };
 
 extern ApplicationContext GlobalContext;
