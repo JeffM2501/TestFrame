@@ -42,6 +42,7 @@ struct ApplicationContext
     bool Quit = false;
     MainView* View = nullptr;
 
+    bool ScreenshotView = false;
     bool TakeScreenshot = false;
     bool CopyScreenshot = false;
 };

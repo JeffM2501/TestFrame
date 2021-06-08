@@ -207,8 +207,15 @@ void UIManager::ShowMenu()
                 if (ImGui::MenuItem("Take Screenshot"))
                     GlobalContext.TakeScreenshot = true;
 
-                if (ImGui::MenuItem("Copy Screenshot", "Ctl+Alt+C"))
+                if (ImGui::MenuItem("Copy Screenshot", "F11"))
                     GlobalContext.CopyScreenshot = true;
+
+                ImGui::Separator();
+                if (ImGui::MenuItem("Take View Screenshot"))
+                    GlobalContext.ScreenshotView = GlobalContext.TakeScreenshot = true;
+
+                if (ImGui::MenuItem("Copy View Screenshot", "Shift+F11"))
+                    GlobalContext.ScreenshotView = GlobalContext.CopyScreenshot = true;
 
                 ImGui::EndMenu();
             }
@@ -238,14 +245,12 @@ void UIManager::ShowMenu()
         }
     }
 
-    if (copyScreenshot || (IsKeyPressed(KEY_C) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) && (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))))
+    if (IsKeyPressed(KEY_F11))
     {
-        unsigned char* imgData = rlReadScreenPixels(GetScreenWidth(), GetScreenHeight());
-        Image image = { imgData, GetScreenWidth(), GetScreenHeight(), 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
+        if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
+            GlobalContext.ScreenshotView = true;
 
-        PlatformTools::CopyImageToClipboard(image);
-
-        RL_FREE(imgData);
+        GlobalContext.CopyScreenshot = true;
     }
 }
 
