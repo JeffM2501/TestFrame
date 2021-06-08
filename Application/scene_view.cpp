@@ -28,6 +28,7 @@
 *
 **********************************************************************************************/
 
+#include "application_context.h"
 #include "scene_view.h"
 #include "drawing_utils.h"
 
@@ -72,6 +73,12 @@ void SceneView::Show(const Rectangle& contentArea)
     Camera.Update();
 
     BeginTextureMode(SceneTexture);
+    if (GlobalContext.ScreenshotView)
+    {
+        ApplicationContext::Screenshot();
+        GlobalContext.ScreenshotView = false;
+    }
+
     OnShow(contentArea);
     EndTextureMode();
 

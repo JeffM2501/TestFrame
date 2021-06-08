@@ -28,6 +28,7 @@
 *
 **********************************************************************************************/
 
+#include "application_context.h"
 #include "sprite_view.h"
 #include "drawing_utils.h"
 
@@ -99,6 +100,12 @@ void SpriteView::Show(const Rectangle& contentArea)
     }
 
     BeginTextureMode(SceneTexture);
+    if (GlobalContext.ScreenshotView)
+    {
+        ApplicationContext::Screenshot();
+        GlobalContext.ScreenshotView = false;
+    }
+
     OnShow(contentArea);
     EndTextureMode();
 

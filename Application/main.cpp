@@ -46,6 +46,27 @@
 
 ApplicationContext GlobalContext;
 
+void ApplicationContext::Screenshot()
+{
+    if (GlobalContext.CopyScreenshot)
+    {
+        GlobalContext.CopyScreenshot = false;
+        unsigned char* imgData = rlReadScreenPixels(GetScreenWidth(), GetScreenHeight());
+        Image image = { imgData, GetScreenWidth(), GetScreenHeight(), 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
+
+        PlatformTools::CopyImageToClipboard(image);
+
+        RL_FREE(imgData);
+        TraceLog(LOG_INFO, "Copied Screenshot to Clipboard");
+    }
+
+    if (GlobalContext.TakeScreenshot)
+    {
+        GlobalContext.TakeScreenshot = false;
+        ::TakeScreenshot(TextFormat("%d.png", GetRandomValue(1, 999999999)));
+    }
+}
+
 void ApplicationStartup();
 void ApplicationShutdown();
 
@@ -104,24 +125,10 @@ int main(int argc, char* argv[])
 
         EndDrawing();
 
-        if (GlobalContext.CopyScreenshot)
-        {
-            GlobalContext.CopyScreenshot = false;
-            unsigned char* imgData = rlReadScreenPixels(GetScreenWidth(), GetScreenHeight());
-            Image image = { imgData, GetScreenWidth(), GetScreenHeight(), 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
-
-            PlatformTools::CopyImageToClipboard(image);
-
-            RL_FREE(imgData);
-            TraceLog(LOG_INFO, "Copied Screenshot to Clipboard");
-        }
-
-        if (GlobalContext.TakeScreenshot)
-        {
-            GlobalContext.TakeScreenshot = false;
-            TakeScreenshot(TextFormat("%d.png", GetRandomValue(1, 999999999)));
-        }
+        if (!GlobalContext.ScreenshotView)
+            ApplicationContext::Screenshot();
     }
+
     GlobalContext.View->Shutdown();
     ui.Shutdown();
 
