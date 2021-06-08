@@ -31,6 +31,8 @@
 #pragma once
 
 #include "raylib.h"
+#include <string>
+#include <vector>
 
 namespace PlatformTools
 {
@@ -41,6 +43,12 @@ namespace PlatformTools
     };
 
     void CopyImageToClipboard(Image& image);
+
+    std::string ShowOpenFileDialog(std::vector<std::pair<std::string, std::string>> filterValues);
+    std::string ShowOpenFileDialog();
+
+    std::string ShowSaveFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues);
+    std::string ShowSaveFileDialog(const char* filename);
 
     void SetWindowHandle(void* handle);
 }
