@@ -32,24 +32,75 @@
 
 #include <ctype.h>
 #include "raylib.h"
+#include "raymath.h"
 
 
 namespace MovementTools
 {
-    inline Vector2 GetWADSVector()
+    inline Vector2 GetWADSVector(float speed = 1, bool flipY = false)
     {
+        float yScale = 1;
+        if (flipY)
+            yScale = -1;
         Vector2 result = { 0,0 };
         if (IsKeyDown(KEY_W))
-            result.y = -GetFrameTime();
+            result.y = -GetFrameTime() * speed * yScale;
         else if (IsKeyDown(KEY_S))
-            result.y = GetFrameTime();
+            result.y = GetFrameTime() * speed * yScale;
 
         if (IsKeyDown(KEY_D))
-            result.x = GetFrameTime();
+            result.x = GetFrameTime() * speed;
         else if (IsKeyDown(KEY_A))
-            result.x = -GetFrameTime();
+            result.x = -GetFrameTime() * speed;
 
         return result;
+    }
+
+    inline Vector2 GetArrowVector(float speed = 1, bool flipY = false)
+    {
+        float yScale = 1;
+        if (flipY)
+            yScale = -1;
+        Vector2 result = { 0,0 };
+        if (IsKeyDown(KEY_UP))
+            result.y = -GetFrameTime() * speed * yScale;
+        else if (IsKeyDown(KEY_DOWN))
+            result.y = GetFrameTime() * speed * yScale;
+
+        if (IsKeyDown(KEY_RIGHT))
+            result.x = GetFrameTime() * speed;
+        else if (IsKeyDown(KEY_LEFT))
+            result.x = -GetFrameTime() * speed;
+
+        return result;
+    }
+
+    inline Vector2 RotateVector2Arrows(Vector2& vector, float speed = 90)
+    {
+        if (IsKeyDown(KEY_LEFT))
+            vector = Vector2Rotate(vector, -speed * GetFrameTime());
+        if (IsKeyDown(KEY_RIGHT))
+            vector = Vector2Rotate(vector, speed * GetFrameTime());
+
+        return vector;
+    }
+}
+
+namespace KeyboardTools
+{
+    inline bool IsShiftDown()
+    {
+        return IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
+    }
+
+    inline bool IsControlDown()
+    {
+        return IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
+    }
+
+    inline bool IsAltDown()
+    {
+        return IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT);
     }
 }
 
