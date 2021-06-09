@@ -147,14 +147,14 @@ namespace Base64
 
         if (*size % 3 == 1)
         {
-            int n = *size / 3;
+            size_t n = *size / 3;
             unsigned char a = base64Table[(int)input[4 * n]];
             unsigned char b = base64Table[(int)input[4 * n + 1]];
             buf[*size - 1] = (a << 2) | (b >> 4);
         }
         else if (*size % 3 == 2)
         {
-            int n = *size / 3;
+            size_t n = *size / 3;
             unsigned char a = base64Table[(int)input[4 * n]];
             unsigned char b = base64Table[(int)input[4 * n + 1]];
             unsigned char c = base64Table[(int)input[4 * n + 2]];
