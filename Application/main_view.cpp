@@ -51,6 +51,7 @@ void MainView::Update()
 void MainView::Show(const Rectangle& contentArea)
 {
     OnShow(contentArea);
+    LastMousePos = GetMousePosition();
 }
 
 void MainView::ResizeContentArea(const Rectangle& contentArea)

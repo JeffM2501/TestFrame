@@ -204,14 +204,14 @@ void UIManager::ShowMenu()
 
             if (ImGui::BeginMenu("Screenshot"))
             {
-                if (ImGui::MenuItem("Take Screenshot"))
+                if (ImGui::MenuItem("Save Screenshot..."))
                     GlobalContext.TakeScreenshot = true;
 
                 if (ImGui::MenuItem("Copy Screenshot", "F11"))
                     GlobalContext.CopyScreenshot = true;
 
                 ImGui::Separator();
-                if (ImGui::MenuItem("Take View Screenshot"))
+                if (ImGui::MenuItem("Save View Screenshot..."))
                     GlobalContext.ScreenshotView = GlobalContext.TakeScreenshot = true;
 
                 if (ImGui::MenuItem("Copy View Screenshot", "Shift+F11"))

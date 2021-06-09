@@ -63,7 +63,9 @@ void ApplicationContext::Screenshot()
     if (GlobalContext.TakeScreenshot)
     {
         GlobalContext.TakeScreenshot = false;
-        ::TakeScreenshot(TextFormat("%d.png", GetRandomValue(1, 999999999)));
+        std::string path = PlatformTools::ShowSaveFileDialog(TextFormat("%d.png", GetRandomValue(1, 999999999)));
+        if (path.size() > 0)
+            ::TakeScreenshot(path.c_str());
     }
 }
 

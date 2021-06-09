@@ -110,7 +110,6 @@ public:
 
         if (view->Is3D())
         {
-
             Vector3 camPos = view->GetViewPos();
             ImGui::Text("%s", view->GetViewName());
             ImGui::Text("X %.2f Y %.2f Z %.2f", camPos.x, camPos.y, camPos.z);

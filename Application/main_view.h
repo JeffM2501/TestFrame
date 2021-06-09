@@ -61,11 +61,24 @@ public:
         return pos;
     }
 
+    inline Vector2 GetMouseDelta()
+    {
+        Vector2 pos = GetMousePosition();
+
+        pos.x -= LastMousePos.x;
+        pos.y -= LastMousePos.y;
+        return pos;
+    }
+
 public:
     Rectangle LastContentArea = { 0 };
 
 protected:
     virtual void OnShow(const Rectangle& contentArea);
+
+private:
+    Vector2 LastMousePos = { 0,0 };
+
 };
 
 RLAPI Shader SetModelMaterialShader(Model* model, int materialIndex, Shader shader);
