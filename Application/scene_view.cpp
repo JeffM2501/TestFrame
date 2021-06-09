@@ -116,17 +116,6 @@ void SceneView::DrawGizmo(float scale)
     DrawLine3D(Vector3{ 0,0,scale }, Vector3{ scale * 0.125f, 0,scale * 0.75f }, BLUE);
 }
 
-void SceneView::OnShow(const Rectangle& contentArea)
-{
-    ClearBackground(BLACK);
-    Camera.BeginMode3D();
-    DrawDefaultScene();
-   
-    // Draw stuff here
-
-    Camera.EndMode3D();
-}
-
 void SceneView::DrawDefaultScene()
 {
     DrawSkybox();
@@ -172,4 +161,15 @@ void SceneView::DrawSkybox()
     rlEnableBackfaceCulling();     // enable things we turned off
     rlEnableDepthMask();
     rlEnableDepthTest();
+}
+
+void SceneView::OnShow(const Rectangle& contentArea)
+{
+    ClearBackground(BLACK);
+    Camera.BeginMode3D();
+    DrawDefaultScene();
+
+    // Draw stuff here
+
+    Camera.EndMode3D();
 }

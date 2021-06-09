@@ -75,7 +75,6 @@ namespace Inspectors
         if (ImGui::Button("A16x"))
             SetTextureFilter(texture, TEXTURE_FILTER_ANISOTROPIC_16X);
 
-
         ImGui::SameLine();
         if (ImGui::Button("Mip"))
             GenTextureMipmaps((Texture*)&texture);
@@ -106,7 +105,7 @@ public:
         ImGui::Text("FPS %dAvg %.0fInst", avgFPS, instantFPS);
         ImGui::Text("Frame Time %f", frameTime);
 
-        Vector2 mouse = GetMousePosition();
+        Vector2 mouse = view->GetViewMousePosition();
         ImGui::Text("Mouse X%.0f Y%.0f", mouse.x, mouse.y);
 
         if (view->Is3D())

@@ -32,6 +32,7 @@
 
 #include "raylib.h"
 #include "FPCamera.h"
+#include "imgui.h"
 
 class MainView
 {
@@ -50,6 +51,15 @@ public:
     inline virtual Vector2 GetViewOrientation() const { return Vector2{ 0,0 }; }
 
     inline virtual bool Is3D() const { return false; }
+
+    inline Vector2 GetViewMousePosition()
+    {
+        Vector2 pos = GetMousePosition();
+
+        pos.x -= LastContentArea.x;
+        pos.y -= LastContentArea.y;
+        return pos;
+    }
 
 public:
     Rectangle LastContentArea = { 0 };

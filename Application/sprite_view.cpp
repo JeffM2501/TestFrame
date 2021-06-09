@@ -139,6 +139,7 @@ void SpriteView::OnShow(const Rectangle& contentArea)
     BeginMode2D(Camera);
     DrawUtils::DrawGrid2D(Vector2Zero(), (int)RectTools::MaxSize(contentArea)/2, 100, Colors::Gray, Colors::DarkBlue);
     DrawTexture(Tx, Tx.width/-2, Tx.height/-2, Colors::White);
+
     EndMode2D();
 
     DrawText(TextFormat("Zoom:%.1f%%", Camera.zoom * 100), 0, (int)contentArea.height - 20, 20, Colors::White);

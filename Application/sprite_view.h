@@ -50,6 +50,12 @@ public:
     inline Vector3 GetViewPos() const override { return Vector3{ Camera.target.x, Camera.target.y, 0 }; }
     inline Vector2 GetViewOrientation() const override { return Vector2{ Camera.rotation, 0 }; }
 
+    inline Vector2 GetWorldMousePos()
+    {
+        Vector2 pos = GetViewMousePosition();
+        return GetScreenToWorld2D(pos, Camera);
+    }
+
 protected:
     virtual void OnShow(const Rectangle& contentArea);
 
