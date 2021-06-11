@@ -34,6 +34,8 @@
 #include "FPCamera.h"
 #include "imgui.h"
 
+class InspectorWindow;
+
 class MainView
 {
 public:
@@ -50,7 +52,7 @@ public:
     inline virtual Vector3 GetViewPos() const { return Vector3{ 0,0,0 }; }
     inline virtual Vector2 GetViewOrientation() const { return Vector2{ 0,0 }; }
 
-    inline virtual void ShowInspectorContents() {}
+    virtual void ShowInspectorContents(const InspectorWindow& window);
 
     inline virtual bool Is3D() const { return false; }
 

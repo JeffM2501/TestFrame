@@ -134,8 +134,16 @@ void SpriteView::ResizeContentArea(const Rectangle& contentArea)
     EndTextureMode();
 }
 
-void SpriteView::ShowInspectorContents()
+void SpriteView::ShowInspectorContents(const InspectorWindow& window)
 {
+    if (ImGui::Button("Center"))
+        Camera.target = Vector2Zero();
+
+    ImGui::SameLine();
+    if (ImGui::Button("1:1"))
+        Camera.zoom = 1;
+   
+    window.ShowCommonData(this);
     ImGui::TextUnformatted("Texture");
     Inspectors::ShowTextureInspector(Tx);
     Inspectors::ShowSetTextureFilter(Tx);

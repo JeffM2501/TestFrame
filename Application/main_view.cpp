@@ -29,6 +29,7 @@
 **********************************************************************************************/
 
 #include "main_view.h"
+#include "inspector_window.h"
 
 #include "raylib.h"
 #include "rlgl.h"
@@ -61,6 +62,11 @@ void MainView::ResizeContentArea(const Rectangle& contentArea)
 void MainView::OnShow(const Rectangle& contentArea)
 { 
     ClearBackground(BLACK);
+}
+
+void MainView::ShowInspectorContents(const InspectorWindow& window)
+{ 
+    window.ShowCommonData(this);
 }
 
 // shader tools

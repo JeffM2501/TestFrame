@@ -34,6 +34,7 @@
 #include <string>
 #include <deque>
 
+#include "application_context.h"
 #include "main_view.h"
 
 class UIWindow

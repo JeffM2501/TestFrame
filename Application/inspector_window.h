@@ -93,7 +93,7 @@ public:
         Name = InspectorWindowName;
     }
 
-    inline void ShowCommonData(MainView* view)
+    inline void ShowCommonData(MainView* view) const
     {
         float frameTime = GetFrameTime();
         float instantFPS = 0;
@@ -128,8 +128,6 @@ public:
 
     inline void OnShow(MainView* view) override
     {
-        ShowCommonData(view);
-
-        view->ShowInspectorContents();
+        view->ShowInspectorContents(*this);
     }
 };

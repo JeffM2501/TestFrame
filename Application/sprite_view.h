@@ -56,7 +56,7 @@ public:
         return GetScreenToWorld2D(pos, Camera);
     }
 
-    void ShowInspectorContents() override;
+    void ShowInspectorContents(const InspectorWindow& window) override;
 
 protected:
     virtual void OnShow(const Rectangle& contentArea);
