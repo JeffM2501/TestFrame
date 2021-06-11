@@ -29,6 +29,7 @@
 **********************************************************************************************/
 
 #include "application_context.h"
+#include "inspector_window.h"
 #include "sprite_view.h"
 #include "drawing_utils.h"
 
@@ -133,11 +134,19 @@ void SpriteView::ResizeContentArea(const Rectangle& contentArea)
     EndTextureMode();
 }
 
+void SpriteView::ShowInspectorContents()
+{
+    ImGui::TextUnformatted("Texture");
+    Inspectors::ShowTextureInspector(Tx);
+    Inspectors::ShowSetTextureFilter(Tx);
+}
+
 void SpriteView::OnShow(const Rectangle& contentArea)
 {
     ClearBackground(Colors::DarkGray);
     BeginMode2D(Camera);
     DrawUtils::DrawGrid2D(Vector2Zero(), (int)RectTools::MaxSize(contentArea)/2, 100, Colors::Gray, Colors::DarkBlue);
+    
     DrawTexture(Tx, Tx.width/-2, Tx.height/-2, Colors::White);
 
     EndMode2D();

@@ -130,13 +130,6 @@ public:
     {
         ShowCommonData(view);
 
-        if (!view->Is3D())
-        {
-            SpriteView* sView = reinterpret_cast<SpriteView*>(view);
-
-            ImGui::TextUnformatted("Texture");
-            Inspectors::ShowTextureInspector(sView->Tx);
-            Inspectors::ShowSetTextureFilter(sView->Tx);
-        }
+        view->ShowInspectorContents();
     }
 };

@@ -50,6 +50,8 @@ public:
     inline virtual Vector3 GetViewPos() const { return Vector3{ 0,0,0 }; }
     inline virtual Vector2 GetViewOrientation() const { return Vector2{ 0,0 }; }
 
+    inline virtual void ShowInspectorContents() {}
+
     inline virtual bool Is3D() const { return false; }
 
     inline Vector2 GetViewMousePosition()

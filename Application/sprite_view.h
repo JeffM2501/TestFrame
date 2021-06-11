@@ -56,6 +56,8 @@ public:
         return GetScreenToWorld2D(pos, Camera);
     }
 
+    void ShowInspectorContents() override;
+
 protected:
     virtual void OnShow(const Rectangle& contentArea);
 
