@@ -63,6 +63,10 @@ struct ApplicationContext
 
 extern ApplicationContext GlobalContext;
 
+#define REGISTER_VIEW(viewType) \
+static viewType View;
+
+
 namespace LogSink
 {
     struct LogItem

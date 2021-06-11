@@ -37,6 +37,7 @@
 
 MainView::MainView()
 {
+    GlobalContext.RegisteredViews.push_back(this);
 }
 
 void MainView::Shutdown()

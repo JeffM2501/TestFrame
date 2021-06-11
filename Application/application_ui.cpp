@@ -88,9 +88,9 @@ void UIManager::Show(MainView* view)
         ImGuiWindowFlags_NoDecoration |
         ImGuiWindowFlags_NoSavedSettings))
     {
-     ImGui::PopStyleVar();
+        ImGui::PopStyleVar();
 
-        DockspaceId = ImGui::DockSpace(ImGui::GetID("MainWindowDock"), ImGui::GetContentRegionAvail() ,ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoDockingInCentralNode);
+        DockspaceId = ImGui::DockSpace(ImGui::GetID("MainWindowDock"), ImGui::GetContentRegionAvail(), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoDockingInCentralNode);
 
         if (ImGui::IsWindowAppearing())
             SetupUI();

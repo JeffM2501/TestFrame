@@ -34,8 +34,8 @@
 
 #include "platform_tools.h"
 
-#include "scene_view.h"
-#include "sprite_view.h"
+// #include "scene_view.h"
+// #include "sprite_view.h"
 
 #include "raylib.h"
 #include "rlgl.h"
@@ -89,17 +89,7 @@ int main(int argc, char* argv[])
     ApplicationStartup();
 
     UIManager ui;
-    SceneView sceneView;
-    SpriteView spriteView;
-    GlobalContext.RegisteredViews.push_back(&sceneView);
-    GlobalContext.RegisteredViews.push_back(&spriteView);
-
-
-    if (Start2D)
-        GlobalContext.ChangeView(&spriteView);
-    else
-        GlobalContext.ChangeView(&sceneView);
-
+    GlobalContext.ChangeView(GlobalContext.RegisteredViews[0]);
     ui.Startup();
 
     // Main game loop

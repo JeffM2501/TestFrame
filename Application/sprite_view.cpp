@@ -33,6 +33,7 @@
 #include "sprite_view.h"
 #include "drawing_utils.h"
 
+REGISTER_VIEW(SpriteView);
 
 void SpriteView::Setup()
 {
