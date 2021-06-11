@@ -42,6 +42,9 @@ SceneView::SceneView()
     Camera.Setup(45, Vector3{ 0,1,0 });
     Camera.MoveSpeed = Vector3{ 5,5,5 };
 
+    Camera.ControlsKeys[FPCamera::CameraControls::MOVE_UP] = KEY_SPACE;
+    Camera.ControlsKeys[FPCamera::CameraControls::MOVE_DOWN] = KEY_LEFT_CONTROL;
+
     rlEnableSmoothLines();
     SetupSkybox();
 }

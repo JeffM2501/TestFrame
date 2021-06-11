@@ -149,7 +149,7 @@ project "Application"
 		dependson {"raylib"}
 		links {"winmm", "raylib.lib", "kernel32","	Shlwapi"}
 		libdirs {"bin/%{cfg.buildcfg}"}
-        charset("MBCS")
+        characterset ("MBCS")
 		
 	filter "action:gmake*"
 		links {"pthread", "GL", "m", "dl", "rt", "X11"}
