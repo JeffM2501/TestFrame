@@ -91,11 +91,14 @@ int main(int argc, char* argv[])
     UIManager ui;
     SceneView sceneView;
     SpriteView spriteView;
+    GlobalContext.RegisteredViews.push_back(&sceneView);
+    GlobalContext.RegisteredViews.push_back(&spriteView);
+
 
     if (Start2D)
-        GlobalContext.View = new SpriteView();
+        GlobalContext.ChangeView(&spriteView);
     else
-        GlobalContext.View = new SceneView();
+        GlobalContext.ChangeView(&sceneView);
 
     ui.Startup();
 
@@ -131,11 +134,8 @@ int main(int argc, char* argv[])
             ApplicationContext::Screenshot();
     }
 
-    GlobalContext.View->Shutdown();
+    GlobalContext.ChangeView(nullptr);
     ui.Shutdown();
-
-    delete(GlobalContext.View);
-    GlobalContext.View = nullptr;
 
     ApplicationShutdown();
 

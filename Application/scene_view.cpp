@@ -36,7 +36,7 @@
 #include "rlgl.h"
 #include "raymath.h"
 
-SceneView::SceneView()
+void SceneView::Setup()
 {
     Camera.HideCursor = false;
     Camera.Setup(45, Vector3{ 0,1,0 });

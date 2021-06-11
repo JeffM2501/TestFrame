@@ -42,6 +42,9 @@ public:
     MainView();
     virtual ~MainView() {}
 
+    inline virtual const char* GetName() { return nullptr; }
+    virtual void Setup() {}
+
     virtual void Update();
     virtual void Show(const Rectangle& contentArea);
     virtual void ResizeContentArea(const Rectangle& contentArea);

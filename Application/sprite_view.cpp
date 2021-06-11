@@ -34,7 +34,7 @@
 #include "drawing_utils.h"
 
 
-SpriteView::SpriteView() : MainView()
+void SpriteView::Setup()
 {
     Tx = LoadTexture("parrots.png");
     SetTextureFilter(Tx, TEXTURE_FILTER_TRILINEAR);

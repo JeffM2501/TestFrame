@@ -35,8 +35,10 @@
 class SceneView : public MainView
 {
 public:
-    SceneView();
     virtual ~SceneView() {}
+
+    inline const char* GetName() override { return "3D View"; }
+    void Setup() override;
 
     void Update() override;
     void Show(const Rectangle& contentArea) override;

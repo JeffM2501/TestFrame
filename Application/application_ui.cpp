@@ -155,21 +155,14 @@ void UIManager::ShowMenu()
 
         if (ImGui::BeginMenu("Views"))
         {
-            bool is3d = GlobalContext.View->Is3D();
-
-            if (ImGui::MenuItem("3d View", nullptr, &is3d, !is3d))
+            for (MainView* view : GlobalContext.RegisteredViews)
             {
-                GlobalContext.View->Shutdown();
-                delete(GlobalContext.View);
-                GlobalContext.View = new SceneView();
-            }
+                bool selected = view == GlobalContext.View;
 
-            bool is2d = !GlobalContext.View->Is3D();
-            if (ImGui::MenuItem("2d View", nullptr, &is2d, is3d))
-            {
-                GlobalContext.View->Shutdown();
-                delete(GlobalContext.View);
-                GlobalContext.View = new SpriteView();
+                if (ImGui::MenuItem(view->GetName(), nullptr, &selected, !selected))
+                {
+                    GlobalContext.ChangeView(view);
+                }
             }
 
             ImGui::EndMenu();

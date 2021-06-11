@@ -42,11 +42,23 @@ struct ApplicationContext
     bool Quit = false;
     MainView* View = nullptr;
 
+    std::vector<MainView*> RegisteredViews;
+
     bool ScreenshotView = false;
     bool TakeScreenshot = false;
     bool CopyScreenshot = false;
 
     static void Screenshot();
+
+    void ChangeView(MainView* newView)
+    {
+        if (View != nullptr)
+            View->Shutdown();
+
+        View = newView;
+        if (View != nullptr)
+            View->Setup();
+    }
 };
 
 extern ApplicationContext GlobalContext;

@@ -38,7 +38,8 @@ public:
     Texture Tx;
 
 public:
-    SpriteView();
+    inline const char* GetName() override { return "2D View"; }
+    void Setup() override;
 
     virtual void Shutdown();
 
