@@ -32,10 +32,73 @@
 
 #include "main_view.h"
 
+#include "RLAssets.h"
 #include "imgui.h"
 
 #include <vector>
 #include <string>
+
+
+class ApplicationPrefs
+{
+protected:
+    std::string PrefsFile;
+
+public:
+    std::string LastView = "2d View";
+    int WindowHeight = 720;
+    int WindowWidth = 1280;
+
+    bool Maximized = false;
+
+    void Setup()
+    {
+        PrefsFile = rlas_GetApplicationBasePath();
+        PrefsFile += "prefs.txt";
+
+        FILE* fp = fopen(PrefsFile.c_str(), "r");
+        if (fp == nullptr)
+            return;
+
+        char temp[1024] = { 0 };
+        int max = 0;
+        char* p = temp;
+        while (true)
+        {
+            fread(p, 1, 1, fp);
+            if (*p == '\n')
+            {
+                *p = '\0';
+                break;
+            }
+            else
+                p++; 
+        }
+        fscanf(fp, "%d\n%d\n%d", &WindowHeight,&WindowWidth,&max);
+        LastView = temp;
+        Maximized = max != 0;
+        fclose(fp);
+    }
+
+    void Save()
+    {
+        FILE* fp = fopen(PrefsFile.c_str(), "w");
+        if (fp == nullptr)
+            return;
+
+        Maximized = IsWindowMaximized();
+        if (!Maximized)
+        {
+            WindowHeight = GetScreenHeight();
+            WindowWidth = GetScreenWidth();
+        }
+
+        int max = Maximized ? 1 : 0;
+
+        fprintf(fp, "%s\n%d\n%d\n%d", LastView.c_str(), WindowHeight, WindowWidth, max);
+        fclose(fp);
+    }
+};
 
 struct ApplicationContext
 {
@@ -43,6 +106,8 @@ struct ApplicationContext
     MainView* View = nullptr;
 
     std::vector<MainView*> RegisteredViews;
+
+    ApplicationPrefs Prefs;
 
     bool ScreenshotView = false;
     bool TakeScreenshot = false;
@@ -58,6 +123,12 @@ struct ApplicationContext
         View = newView;
         if (View != nullptr)
             View->Setup();
+
+        if (View != nullptr)
+        {
+            Prefs.LastView = View->GetName();
+            Prefs.Save();
+        }
     }
 
     MainView* FindView(const char* name)

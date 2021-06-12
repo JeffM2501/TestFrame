@@ -83,13 +83,23 @@ int main(int argc, char* argv[])
 {
     LogSink::Setup();
 
-    SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
-    InitWindow(1280, 720, "TestBed Application");
+    GlobalContext.Prefs.Setup();
+
+    unsigned int flags = FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE;
+
+    if (GlobalContext.Prefs.Maximized)
+        flags |= FLAG_WINDOW_MAXIMIZED;
+
+    SetConfigFlags(flags);
+    InitWindow(GlobalContext.Prefs.WindowWidth, GlobalContext.Prefs.WindowHeight, "TestBed Application");
    
+    if (GlobalContext.Prefs.Maximized)
+        MaximizeWindow();
+
     ApplicationStartup();
 
     UIManager ui;
-    GlobalContext.ChangeView(GlobalContext.FindView("2D View"));
+    GlobalContext.ChangeView(GlobalContext.FindView(GlobalContext.Prefs.LastView.c_str()));
     ui.Startup();
 
     // Main game loop
@@ -123,6 +133,8 @@ int main(int argc, char* argv[])
         if (!GlobalContext.ScreenshotView)
             ApplicationContext::Screenshot();
     }
+
+    GlobalContext.Prefs.Save();
 
     GlobalContext.ChangeView(nullptr);
     ui.Shutdown();
