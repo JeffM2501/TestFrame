@@ -40,7 +40,7 @@ class MainView
 {
 public:
     MainView();
-    virtual ~MainView() {}
+    virtual ~MainView() = default;
 
     inline virtual const char* GetName() { return nullptr; }
     virtual void Setup() {}
@@ -55,9 +55,7 @@ public:
     inline virtual Vector3 GetViewPos() const { return Vector3{ 0,0,0 }; }
     inline virtual Vector2 GetViewOrientation() const { return Vector2{ 0,0 }; }
 
-    virtual void ShowInspectorContents(const InspectorWindow& window);
-
-    inline virtual bool Is3D() const { return false; }
+    virtual void ShowInspectorContents(const InspectorWindow& window) {}
 
     inline Vector2 GetViewMousePosition()
     {
@@ -87,6 +85,86 @@ private:
     Vector2 LastMousePos = { 0,0 };
 
 };
+
+class ThreeDView : public MainView
+{
+protected:
+    RenderTexture SceneTexture = { 0 };
+
+    FPCamera Camera;
+    TextureCubemap SkyboxTexture = { 0 };
+    Model Skybox = { 0 };
+
+    // options
+    std::string SkyboxResource = "Daylight Box UV.png";
+
+    bool ShowSkybox = true;
+    bool ShowGround = true;
+    bool ShowOrigin = true;
+
+    virtual void OnSetup() {}
+    virtual void OnShutdown() {}
+    virtual void OnShowInspector(const InspectorWindow& window) {}
+
+public:
+    void Setup() override;
+    void Shutdown() override;
+    void Show(const Rectangle& contentArea) override;
+    void ResizeContentArea(const Rectangle& contentArea) override;
+    void ShowInspectorContents(const InspectorWindow& window) override;
+
+protected:
+    void DrawGizmo(float scale = 1);
+    void SetupSkybox();
+    void DrawSkybox();
+    void DrawDefaultScene();
+};
+
+// 2d View
+
+class TwoDView : public MainView
+{
+protected:
+    virtual void OnSetup() {}
+    virtual void OnShutdown() {}
+    virtual void OnShowInspector(const InspectorWindow& window) {}
+
+public:
+    void Setup() override;
+
+    virtual void Shutdown();
+
+    virtual void Update();
+    virtual void Show(const Rectangle& contentArea);
+    void ResizeContentArea(const Rectangle& contentArea) override;
+
+    inline Vector3 GetViewPos() const override { return Vector3{ Camera.target.x, Camera.target.y, 0 }; }
+    inline Vector2 GetViewOrientation() const override { return Vector2{ Camera.rotation, 0 }; }
+
+    inline Vector2 GetWorldMousePos()
+    {
+        Vector2 pos = GetViewMousePosition();
+        return GetScreenToWorld2D(pos, Camera);
+    }
+
+    void ShowInspectorContents(const InspectorWindow& window) override;
+
+protected:
+    virtual void OnShow(const Rectangle& contentArea) {}
+
+protected:
+    RenderTexture SceneTexture = { 0 };
+    Camera2D Camera = { 0 };
+
+    bool Dragging = false;
+    Vector2 ClickPos = { 0,0 };
+    Vector2 ClickTarget = { 0,0 };
+
+    static const int MaxZoomLevels = 14;
+    float ZoomLevels[MaxZoomLevels] = { 0.125f, 0.25f, 0.5f, 1, 1.5f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f };
+    int ZoomLevel = 3;
+};
+
 
 RLAPI Shader SetModelMaterialShader(Model* model, int materialIndex, Shader shader);
 RLAPI void SetModelMaterialShaderValue(Model* model, int materialIndex, const char* location, const void* value, int uniformType);

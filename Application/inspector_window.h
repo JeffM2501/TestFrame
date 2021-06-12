@@ -107,23 +107,6 @@ public:
 
         Vector2 mouse = view->GetViewMousePosition();
         ImGui::Text("Mouse X%.0f Y%.0f", mouse.x, mouse.y);
-
-        if (view->Is3D())
-        {
-            Vector3 camPos = view->GetViewPos();
-            ImGui::Text("%s", view->GetViewName());
-            ImGui::Text("X %.2f Y %.2f Z %.2f", camPos.x, camPos.y, camPos.z);
-            Vector2 camAngles = view->GetViewOrientation();
-            ImGui::Text("Yaw%.2f Pitch%.2f", camAngles.y, camAngles.x);
-        }
-        else
-        {
-            Vector3 camPos = view->GetViewPos();
-            ImGui::Text("%s", view->GetViewName());
-            ImGui::Text("X %.2f Y %.2f ", camPos.x, camPos.y);
-            Vector2 camAngles = view->GetViewOrientation();
-            ImGui::Text("Rotation%.2f", camAngles.x);
-        }
     }
 
     inline void OnShow(MainView* view) override
