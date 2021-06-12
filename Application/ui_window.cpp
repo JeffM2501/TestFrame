@@ -38,6 +38,7 @@ void UIWindow::Show(MainView* view)
 {
     if (Shown)
     {
+        GetName(Name,view);
         if (ImGui::Begin(Name.c_str(), &Shown, ImGuiWindowFlags_None))
         {
             OnShow(view);
@@ -61,7 +62,6 @@ void UIWindow::Resize()
 LogWindow::LogWindow() : UIWindow()
 {
     Shown = true;
-    Name = LogWindowName;
 }
 
 void LogWindow::OnShow(MainView*)

@@ -44,7 +44,8 @@ public:
     virtual ~UIWindow(){}
 
     bool Shown = false;
-    std::string Name;
+    inline virtual void GetName(std::string& name, MainView* view) const { name = "BaseWindow"; }
+    inline virtual const char* GetMenuName() const { return "Base"; }
 
     void Show(MainView* view = nullptr);
 
@@ -55,6 +56,7 @@ public:
 
 protected:
     virtual void OnShow(MainView* view) {}
+    std::string Name;
 };
 
 constexpr char LogWindowName[] = "Log###RaylibLogWindow";
@@ -63,6 +65,8 @@ class LogWindow : public UIWindow
 {
 public:
     LogWindow();
+    inline void GetName(std::string& name, MainView* view) const override { name = LogWindowName; }
+    inline const char* GetMenuName() const override { return "Log"; }
     void OnShow(MainView* view) override;
 
 private:

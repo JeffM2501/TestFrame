@@ -82,7 +82,7 @@ namespace Inspectors
     }
 }
 
-constexpr char InspectorWindowName[] = "Inspector###RaylibInspectorWindow";
+constexpr char InspectorWindowName[] = " Inspector###RaylibInspectorWindow";
 
 class InspectorWindow : public UIWindow
 {
@@ -90,8 +90,15 @@ public:
     InspectorWindow() : UIWindow()
     {
         Shown = true;
-        Name = InspectorWindowName;
     }
+
+    inline void GetName(std::string& name, MainView* view) const override 
+    { 
+        name = view->GetName();
+        name += InspectorWindowName;
+    }
+
+    inline const char* GetMenuName() const override { return "Inspector"; }
 
     inline void ShowCommonData(MainView* view) const
     {

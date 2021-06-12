@@ -170,7 +170,7 @@ void UIManager::ShowMenu()
         {
             for (auto& window : Windows)
             {
-                ImGui::MenuItem(window->Name.c_str(), nullptr, &window->Shown);
+                ImGui::MenuItem(window->GetMenuName(), nullptr, &window->Shown);
             }
             
             ImGui::EndMenu();
