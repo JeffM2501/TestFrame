@@ -57,6 +57,11 @@ public:
 
     virtual void ShowInspectorContents(const InspectorWindow& window) {}
 
+    // menu functions
+    inline virtual void OnFileMenu() {}
+    inline virtual void OnMenuBar() {}
+    inline virtual void OnToolsMenu() {}
+
     inline Vector2 GetViewMousePosition()
     {
         Vector2 pos = GetMousePosition();
@@ -78,8 +83,12 @@ public:
 public:
     Rectangle LastContentArea = { 0 };
 
+    std::vector<std::pair<std::string, std::string>> OpenFileExtensions;
+
 protected:
     virtual void OnShow(const Rectangle& contentArea);
+
+    bool OpenFileMenu(std::string& filename);
 
 private:
     Vector2 LastMousePos = { 0,0 };

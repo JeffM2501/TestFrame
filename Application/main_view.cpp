@@ -30,12 +30,14 @@
 
 #include "main_view.h"
 #include "drawing_utils.h"
-#include "RaylibColors.h"
 #include "inspector_window.h"
+#include "platform_tools.h"
 
 #include "raylib.h"
 #include "rlgl.h"
 #include "raymath.h"
+
+#include "RaylibColors.h"
 
 MainView::MainView()
 {
@@ -67,20 +69,29 @@ void MainView::OnShow(const Rectangle& contentArea)
     ClearBackground(BLACK);
 }
 
+bool MainView::OpenFileMenu(std::string& filename)
+{
+    if (ImGui::MenuItem("Open..."))
+    {
+        filename = PlatformTools::ShowOpenFileDialog(filename.c_str(), OpenFileExtensions);
+        return filename.size() > 0;
+    }
+    return false;
+}
 
 // 3d view
 void ThreeDView::Setup()
 {
-    OnSetup();
-
     Camera.HideCursor = false;
     Camera.Setup(45, Vector3{ 0,1,0 });
-    Camera.MoveSpeed = Vector3{ 5,5,5 };
+    Camera.MoveSpeed = Vector3{ 10,10,10 };
 
     Camera.ControlsKeys[FPCamera::CameraControls::MOVE_UP] = KEY_SPACE;
     Camera.ControlsKeys[FPCamera::CameraControls::MOVE_DOWN] = KEY_LEFT_CONTROL;
 
     rlEnableSmoothLines();
+
+    OnSetup();
     SetupSkybox();
 }
 
@@ -341,7 +352,14 @@ void TwoDView::ResizeContentArea(const Rectangle& contentArea)
 void TwoDView::ShowInspectorContents(const InspectorWindow& window)
 {
     if (ImGui::Button("Center"))
+    {
         Camera.target = Vector2Zero();
+        Camera.offset = RectTools::CenterSize(LastContentArea);
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Zero"))
+        Camera.offset = Vector2Zero();
 
     ImGui::SameLine();
     if (ImGui::Button("1:1"))

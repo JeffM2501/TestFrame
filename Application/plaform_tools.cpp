@@ -3,7 +3,7 @@
 
 #include "../clip/clip.h"
 
-std::string OpenFileDialog(std::vector<std::pair<std::string, std::string>> filterValues);
+std::string OpenFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues);
 std::string SaveFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues);
 
 namespace PlatformTools
@@ -27,15 +27,15 @@ namespace PlatformTools
         clip::set_image(img);
     }
 
-    std::string ShowOpenFileDialog(std::vector<std::pair<std::string, std::string>> filterValues)
+    std::string ShowOpenFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues)
     {
-        return OpenFileDialog(filterValues);
+        return OpenFileDialog(filename, filterValues);
     }
 
-    std::string ShowOpenFileDialog()
+    std::string ShowOpenFileDialog(const char* filename)
     {
         std::vector<std::pair<std::string, std::string>> filterValues;
-        return OpenFileDialog(filterValues);
+        return OpenFileDialog(filename, filterValues);
     }
 
     std::string ShowSaveFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues)

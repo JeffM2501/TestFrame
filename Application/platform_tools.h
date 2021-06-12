@@ -44,8 +44,8 @@ namespace PlatformTools
 
     void CopyImageToClipboard(Image& image);
 
-    std::string ShowOpenFileDialog(std::vector<std::pair<std::string, std::string>> filterValues);
-    std::string ShowOpenFileDialog();
+    std::string ShowOpenFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues);
+    std::string ShowOpenFileDialog(const char* filename);
 
     std::string ShowSaveFileDialog(const char* filename, std::vector<std::pair<std::string, std::string>> filterValues);
     std::string ShowSaveFileDialog(const char* filename);

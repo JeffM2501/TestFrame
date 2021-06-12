@@ -74,7 +74,7 @@ const char* BuildFilter(std::vector<std::pair<std::string, std::string>> filterV
     return filter;
 }
 
-std::string OpenFileDialog(std::vector<std::pair<std::string,std::string>> filterValues)
+std::string OpenFileDialog(const char* filename, std::vector<std::pair<std::string,std::string>> filterValues)
 {
     std::string result;
 
@@ -83,6 +83,9 @@ std::string OpenFileDialog(std::vector<std::pair<std::string,std::string>> filte
     // common dialog box structure, setting all fields to 0 is important
     OPENFILENAME ofn = { 0 };
     TCHAR szFile[260] = { 0 };
+    if (filename != nullptr)
+        strcpy_s(szFile, 260, filename);
+
     // Initialize remaining fields of OPENFILENAME structure
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = WindowHandle;

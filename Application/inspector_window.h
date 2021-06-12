@@ -51,7 +51,6 @@ namespace Inspectors
 
     inline void ShowSetTextureFilter(const Texture& texture)
     {
-
         if (ImGui::Button("Point"))
             SetTextureFilter(texture, TEXTURE_FILTER_POINT);
         
@@ -79,6 +78,33 @@ namespace Inspectors
         if (ImGui::Button("Mip"))
             GenTextureMipmaps((Texture*)&texture);
 
+    }
+
+    inline void ShowMeshInspector(const Mesh& mesh)
+    {
+        if (ImGui::BeginChild("Mesh Inspector"))
+        {
+            ImGui::TextUnformatted("Mesh");
+            ImGui::Separator();
+
+            ImGui::Text("Verts: %d Tris:%d", mesh.vertexCount, mesh.triangleCount);
+            ImGui::EndChild();
+        }
+    }
+
+    inline void ShowMaterialMapInspector(MaterialMap& materialMap)
+    {
+        ImGui::TextUnformatted("Material Map");
+        ImGui::Separator();
+        ImColor color = ImGuiColors::Convert(materialMap.color);
+        if (ImGui::ColorEdit4("Color###MatColor", &(color.Value.x), ImGuiColorEditFlags_NoBorder))
+        {
+            materialMap.color.r = (unsigned char)(255 * color.Value.x);
+            materialMap.color.g = (unsigned char)(255 * color.Value.y);
+            materialMap.color.b = (unsigned char)(255 * color.Value.z);
+            materialMap.color.a = (unsigned char)(255 * color.Value.w);
+        }
+        ShowTextureInspector(materialMap.texture);
     }
 }
 

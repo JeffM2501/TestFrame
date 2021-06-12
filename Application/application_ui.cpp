@@ -145,11 +145,14 @@ void UIManager::ShowMenu()
     {
         if (ImGui::BeginMenu("File"))
         {
+            GlobalContext.View->OnFileMenu();
+
             if (ImGui::MenuItem("Exit", "Alt+F4"))
                 GlobalContext.Quit = true;
 
             ImGui::EndMenu();
         }
+        GlobalContext.View->OnMenuBar();
 
         if (ImGui::BeginMenu("Views"))
         {
@@ -210,6 +213,7 @@ void UIManager::ShowMenu()
 
                 ImGui::EndMenu();
             }
+            GlobalContext.View->OnToolsMenu();
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help"))
