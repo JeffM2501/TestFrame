@@ -30,7 +30,7 @@
 
 #include "application_context.h"
 #include "inspector_window.h"
-#include "sprite_view.h"
+#include "view.h"
 #include "drawing_utils.h"
 
 REGISTER_VIEW(SpriteView);

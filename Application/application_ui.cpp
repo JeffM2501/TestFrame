@@ -31,8 +31,6 @@
 #include "application_context.h"
 #include "application_ui.h"
 #include "common_utils.h"
-#include "scene_view.h"
-#include "sprite_view.h"
 #include "inspector_window.h"
 #include "platform_tools.h"
 

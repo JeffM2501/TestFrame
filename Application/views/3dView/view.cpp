@@ -29,7 +29,7 @@
 **********************************************************************************************/
 
 #include "application_context.h"
-#include "scene_view.h"
+#include "view.h"
 #include "drawing_utils.h"
 
 #include "raylib.h"

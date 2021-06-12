@@ -133,14 +133,14 @@ project "Application"
 	includedirs {"src"}
 	vpaths 
 	{
-		["Header Files"] = { "**.h"},
-		["Source Files"] = {"**.c", "**.cpp"},
+		["Header Files"] = { "Application/*.h"},
+		["Source Files"] = {"Application/*.c", "Application/*.cpp"},
 	}
-	files {"Application/**.c", "Application/**.cpp", "Application/**.h"}
+	files {"Application/*.c", "Application/*.cpp", "Application/*.h", "Application/views/**.cpp", "Application/views/**.h"}
 
 	links {"raylib", "rlExtrasCPP", "rlImGui", "clip"}
 	
-	includedirs { "%{wks.name}", "raylib/src", "raylibExtras/rlExtrasCPP",  "raylibExtras/rlImGui", "raylibExtras/imGui", "clip"}
+	includedirs { "Application", "Application/views", "raylib/src", "raylibExtras/rlExtrasCPP",  "raylibExtras/rlImGui", "raylibExtras/imGui", "clip"}
     
 	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
 	

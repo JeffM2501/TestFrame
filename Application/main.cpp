@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
     ApplicationStartup();
 
     UIManager ui;
-    GlobalContext.ChangeView(GlobalContext.RegisteredViews[0]);
+    GlobalContext.ChangeView(GlobalContext.FindView("2D View"));
     ui.Startup();
 
     // Main game loop

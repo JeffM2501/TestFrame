@@ -59,6 +59,22 @@ struct ApplicationContext
         if (View != nullptr)
             View->Setup();
     }
+
+    MainView* FindView(const char* name)
+    {
+        if (name == nullptr)
+            return RegisteredViews[0];
+
+        std::string _name = name;
+        for (MainView* view : RegisteredViews)
+        {
+            std::string _vName = view->GetName();
+            if (_name == _vName)
+                return view;
+        }
+
+        return RegisteredViews[0];
+    }
 };
 
 extern ApplicationContext GlobalContext;
