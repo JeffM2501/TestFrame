@@ -1,11 +1,13 @@
+#include <string>
+#include <vector>
+
 #ifdef _WIN32
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <commdlg.h>
 #include <shobjidl.h>
-#include <string>
-#include <vector>
+
 
 HWND WindowHandle;
 namespace PlatformTools
