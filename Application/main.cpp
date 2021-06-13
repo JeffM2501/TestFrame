@@ -192,7 +192,7 @@ namespace LogSink
         LogItem item;
         item.Level = logLevel;
         GetLogLevelPrefix(logLevel, item);
-        vsprintf_s(logText, text, args);
+        vsprintf(logText, text, args);
         item.Text += logText;
         LogLines.push_back(item);
     }
