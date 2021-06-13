@@ -122,6 +122,7 @@ project "clip"
         files {"clip/clip_win.cpp"}
     filter "action:gmake*"
         files {"clip/clip_x11.cpp"}
+		links {"x11", "libpng"}
 
 project "Application"
 	kind "WindowedApp"

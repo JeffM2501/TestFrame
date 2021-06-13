@@ -8,7 +8,6 @@
 #include <commdlg.h>
 #include <shobjidl.h>
 
-
 HWND WindowHandle;
 namespace PlatformTools
 {
@@ -148,21 +147,18 @@ std::string SaveFileDialog(const char* filename, std::vector<std::pair<std::stri
 
 #else
 
-namespace PlatformTools
+void SetWindowHandle(void*)
 {
-    void SetWindowHandle(void*)
-    {
-    }
-    
-    std::string OpenFileDialog(std::vector<std::pair<std::string, std::string>>)
-    {
-        return std::string();
-    }
+}
 
-    std::string SaveFileDialog(const char*, std::vector<std::pair<std::string, std::string>>)
-    {
-        return std::string();
-    }
+std::string OpenFileDialog(std::vector<std::pair<std::string, std::string>>)
+{
+    return std::string();
+}
+
+std::string SaveFileDialog(const char*, std::vector<std::pair<std::string, std::string>>)
+{
+    return std::string();
 }
 
 #endif 
