@@ -151,7 +151,7 @@ void SetWindowHandle(void*)
 {
 }
 
-std::string OpenFileDialog(std::vector<std::pair<std::string, std::string>>)
+std::string OpenFileDialog(const char*, std::vector<std::pair<std::string, std::string>>)
 {
     return std::string();
 }
