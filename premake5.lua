@@ -89,14 +89,14 @@ project "rlImGui"
 	language "C++"
 	targetdir "bin/%{cfg.buildcfg}"
 	
-	includedirs { "raylib/src","raylibExtras/rlImGui", "raylibExtras/imGui"}
+	includedirs { "raylib/src","raylibExtras/rlImGui", "raylibExtras/imgui"}
 	vpaths 
 	{
 		["Header Files"] = { "raylibExtras/lImGui/**.h"},
 		["Source Files"] = {"raylibExtras/rlImGui/**.cpp"},
-		["ImGui Files"] = { "raylibExtras/imGui/*.h","raylibExtras/imGui/*.cpp" },
+		["ImGui Files"] = { "raylibExtras/imgui/*.h","raylibExtras/imgui/*.cpp" },
 	}
-	files {"raylibExtras/imGui/*.h", "raylibExtras/imGui/*.cpp", "raylibExtras/rlImGui/**.cpp", "raylibExtras/rlImGui/**.h"}
+	files {"raylibExtras/imgui/*.h", "raylibExtras/imgui/*.cpp", "raylibExtras/rlImGui/**.cpp", "raylibExtras/rlImGui/**.h"}
     
 project "clip"
 	kind "StaticLib"
@@ -140,7 +140,7 @@ project "Application"
 
 	links {"raylib", "rlExtrasCPP", "rlImGui", "clip"}
 	
-	includedirs { "Application", "Application/views", "raylib/src", "raylibExtras/rlExtrasCPP",  "raylibExtras/rlImGui", "raylibExtras/imGui", "clip"}
+	includedirs { "Application", "Application/views", "raylib/src", "raylibExtras/rlExtrasCPP",  "raylibExtras/rlImGui", "raylibExtras/imgui", "clip"}
     
 	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
 	
