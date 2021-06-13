@@ -32,6 +32,7 @@
 #include "drawing_utils.h"
 #include "inspector_window.h"
 #include "platform_tools.h"
+#include "texture_manager.h"
 
 #include "RaylibColors.h"
 
@@ -54,6 +55,10 @@ protected:
 
     bool ShowEmptyMaps = false;
 
+    TextureManager TextureCache;
+
+    std::vector<std::pair<std::string, std::string>> ImageExtensions;
+
 public:
     ModelViewer()
     {
@@ -61,6 +66,11 @@ public:
         OpenFileExtensions.push_back({ "gltf(binary) files","glb" });
         OpenFileExtensions.push_back({ "gltf files","gltf" });
         OpenFileExtensions.push_back({ "iqm files","iqm" });
+
+        ImageExtensions.push_back({ "png files","png" });
+        ImageExtensions.push_back({ "bmp files","bmp" });
+        ImageExtensions.push_back({ "tga files","tga" });
+        ImageExtensions.push_back({ "hdr files","hdr" });
     }
     inline const char* GetName() override { return "Model View"; }
 
@@ -167,12 +177,17 @@ public:
 
             if (ImGui::Button("SetTexture"))
             {
-                std::string textureFile = PlatformTools::ShowOpenFileDialog(".png");
+                std::string textureFile = PlatformTools::ShowOpenFileDialog(".png",ImageExtensions);
                 if (textureFile.size() > 0)
                 {
                     Texture tx = LoadTexture(textureFile.c_str());
-                    // TODO, unload the old one?
+                    int id = ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap].texture.id;
+
+                    if (id > 0 && id != DefaultTexture.id)
+                        TextureCache.RemoveTexture(ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap].texture);
+
                     ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap].texture = tx;
+                    TextureCache.AddTexture(tx);
                 }
             }
         }
@@ -193,6 +208,7 @@ public:
             if (newModel.meshCount > 0)
             {
                 UnloadModel(ModelFile);
+                TextureCache.Clear();
 
                 float lowestY = std::numeric_limits<float>::max();
 
@@ -207,8 +223,14 @@ public:
 
                 for (int material = 0; material < newModel.materialCount; material++)
                 {
-                    if (newModel.materials[material].maps[MATERIAL_MAP_ALBEDO].texture.height <= 1)
-                        newModel.materials[material].maps[MATERIAL_MAP_ALBEDO].texture = DefaultTexture;
+                    for (int map = 0; map < MATERIAL_MAP_BRDG; map++)
+                    {
+                        if (newModel.materials[material].maps[map].texture.height > 1)
+                            TextureCache.AddTexture(newModel.materials[material].maps[map].texture);
+                        else if (map == 0)
+                            newModel.materials[material].maps[map].texture = DefaultTexture;
+ 
+                    }
                 }
 
                 ModelFile = newModel;
