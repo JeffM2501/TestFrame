@@ -55,7 +55,6 @@ void UIWindow::Resize()
 {
 }
 
-
 /// <summary>
 /// LogWindow 
 /// </summary>

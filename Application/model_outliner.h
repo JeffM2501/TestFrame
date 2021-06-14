@@ -76,11 +76,18 @@ public:
     {
         bool selected = (SelectedMaterial == materialIndex && SelectedMaterialMap == mapIndex);
 
-        ImGuiSelectableFlags flags = ImGuiSelectableFlags_None;
-        if (mapItem.texture.id == 0 && !ShowEmptyMaps)
-            return;
+        char* suffix = "";
 
-        if (ImGui::Selectable(TextFormat("%s###mat%d-map%d", name, materialIndex, mapIndex ), &selected, flags))
+        ImGuiSelectableFlags flags = ImGuiSelectableFlags_None;
+        if (mapItem.texture.id == 0)
+        {
+            if (!ShowEmptyMaps)
+                return;
+            else
+                suffix = "(*)";
+        }
+
+        if (ImGui::Selectable(TextFormat("%s%s###mat%d-map%d", name,suffix, materialIndex, mapIndex ), &selected, flags))
         {
             SelectedMesh = -1;
             SelectedMaterial = materialIndex;
@@ -90,8 +97,7 @@ public:
 
     inline void OnShow(MainView* view) override
     {
-        ImGui::Checkbox("Show Empty Maps", &ShowEmptyMaps);
-        if (ImGui::BeginChild("ModelTree", ImVec2(ImGui::GetContentRegionAvailWidth(), 200), true))
+        if (ImGui::BeginChild("ModelTree", ImVec2(ImGui::GetContentRegionAvailWidth(), ImGui::GetContentRegionAvail().y - 30), true))
         {
             bool selected = false;
             if (ImGui::TreeNodeEx("Model Tree", ImGuiTreeNodeFlags_DefaultOpen))
@@ -141,5 +147,6 @@ public:
             }
             ImGui::EndChild();
         }
+        ImGui::Checkbox("Show Empty Maps", &ShowEmptyMaps);
     }
 };

@@ -48,9 +48,12 @@ enum class UniformTypes
     Bool,
     Int,
     Float,
-    MaterialMapIndex,
-    Projection,
-    View,
+    Vec2,
+    Vec3,
+    Vec4,
+    Mat4,
+    Sampler2D,
+    SamplerCube,
 };
 
 struct UniformInfo
@@ -59,10 +62,71 @@ struct UniformInfo
     UniformTypes UniformType = UniformTypes::Unknown;
     bool UpdateEachFrame = false;
     void* ValuePtr = nullptr;
+
+    void DeleteValue()
+    {
+        delete[](ValuePtr);
+    }
+
+    void InitDefaultValue()
+    {
+        switch (UniformType)
+        {
+        case UniformTypes::Unknown:
+            ValuePtr = nullptr;
+            break;
+        case UniformTypes::Int:
+        case UniformTypes::Bool:
+            ValuePtr = new int[1];
+            memset(ValuePtr, 0, sizeof(int));
+            break;
+        case UniformTypes::Float:
+            ValuePtr = new float [1];
+            memset(ValuePtr, 0, sizeof(float));
+            break;
+        case UniformTypes::Vec2:
+            ValuePtr = new float[2];
+            memset(ValuePtr, 0, sizeof(float) * 2);
+            break;
+        case UniformTypes::Vec3:
+            ValuePtr = new float[3];
+            memset(ValuePtr, 0, sizeof(float) * 3);
+            break;
+        case UniformTypes::Vec4:
+            ValuePtr = new float[4];
+            memset(ValuePtr, 0, sizeof(float) * 4);
+            ((float*)ValuePtr)[3] = 1.0f;
+            break;
+        case UniformTypes::Mat4:
+            ValuePtr = new float[16];
+            memset(ValuePtr, 0, sizeof(float) * 16);
+            ((float*)ValuePtr)[0] = 1.0f;
+            ((float*)ValuePtr)[5] = 1.0f;
+            ((float*)ValuePtr)[10] = 1.0f;
+            break;
+        case UniformTypes::Sampler2D:
+            ValuePtr = new int[1];
+            memset(ValuePtr, 0, sizeof(int));
+            break;
+        case UniformTypes::SamplerCube:
+            ValuePtr = new int[1];
+            memset(ValuePtr, 0, sizeof(int));
+            break;
+        default:
+            break;
+        }
+    }
 };
 
-struct ShaderInfo
+class ShaderInfo
 {
+public:
+    ~ShaderInfo()
+    {
+        for (auto& info : Uniforms)
+            info.DeleteValue();
+    }
+
     std::string PathName;
     std::string Name;
     ShaderTypes ShaderType = ShaderTypes::Unknown;
@@ -70,8 +134,9 @@ struct ShaderInfo
     std::vector<UniformInfo> Uniforms;
 };
 
-struct ShaderInstance
+class ShaderInstance
 {
+public:
     size_t RefCount = 0;
 
     Shader  RaylibShader = { 0 };
@@ -85,6 +150,6 @@ class ShaderManager
 public:
     std::map<int, ShaderInstance> ShaderCache;
 
-    Shader LoadShader(const char* vertextShaderPath, const char* fragmentShaderPath);
+    Shader LoadShader(int materialIndex, const char* vertextShaderPath, const char* fragmentShaderPath);
 };
 

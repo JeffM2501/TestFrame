@@ -70,6 +70,55 @@ bool StartsWith(const char* prefix, const std::string& text)
     return strncmp(prefix, text.c_str(), l) == 0;
 }
 
+std::string ReadWord(const std::string& text, size_t& offset)
+{
+    std::string value;
+    while (offset < text.length())
+    {
+        if (text.c_str()[offset] == ' ' || text.c_str()[offset] == ';' || text.c_str()[offset] == '/')
+            return value;
+        else
+            value += text.c_str()[offset++];
+    }
+
+    return value;
+}
+
+bool ParseUniformLine(const std::string& text, std::string& uniformType, std::string& uniformName)
+{
+    size_t offset = 8;
+    uniformType = ReadWord(text, offset);
+    ++offset;
+
+    uniformName = ReadWord(text, offset);
+
+    return uniformName.size() > 0 && uniformType.size();
+}
+
+UniformTypes ClassifyUniformType(const std::string& str)
+{
+    if (str == "bool")
+        return UniformTypes::Bool;
+    if (str == "int")
+        return UniformTypes::Int;
+    if (str == "float")
+        return UniformTypes::Float;
+    if (str == "vec2")
+        return UniformTypes::Vec2;
+    if (str == "vec3")
+        return UniformTypes::Vec3;
+    if (str == "vec4")
+        return UniformTypes::Vec4;
+    if (str == "mat4")
+        return UniformTypes::Mat4;
+    if (str == "sampler2D")
+        return UniformTypes::Sampler2D;
+    if (str == "samplerCube")
+        return UniformTypes::SamplerCube;
+
+    return UniformTypes::Unknown;
+}
+
 void ParseUniforms(const char* filename, ShaderInfo& shaderInfo)
 {
     std::vector<std::string> lines = GetFileLines(filename);
@@ -78,14 +127,30 @@ void ParseUniforms(const char* filename, ShaderInfo& shaderInfo)
         if (!StartsWith("uniform ",line))
             continue;
 
-
+        std::string uniformType, uniformName;
+        if (ParseUniformLine(line, uniformType, uniformName))
+        {
+            UniformInfo info;
+            info.UniformType = ClassifyUniformType(uniformType);
+            info.Name = uniformName;
+        }
     }
 }
 
-
-Shader ShaderManager::LoadShader(const char* vertextShaderPath, const char* fragmentShaderPath)
+Shader ShaderManager::LoadShader(int materialIndex, const char* vertextShaderPath, const char* fragmentShaderPath)
 {
+    std::map<int, ShaderInstance>::iterator itr = ShaderCache.find(materialIndex);
 
-    return LoadShader(vertextShaderPath, fragmentShaderPath);
+    if (itr != ShaderCache.end())
+    {
+        UnloadShader(itr->second.RaylibShader);
+        ShaderCache.erase(itr);
+    }
+
+    ShaderInstance& shader = ShaderCache[materialIndex];
+    shader.RaylibShader = ::LoadShader(vertextShaderPath, fragmentShaderPath);
+
+
+    return shader.RaylibShader;
 }
 

@@ -104,6 +104,9 @@ namespace Inspectors
             materialMap.color.b = (unsigned char)(255 * color.Value.z);
             materialMap.color.a = (unsigned char)(255 * color.Value.w);
         }
+        ImGui::Separator();
+        ImGui::DragFloat("Value", &materialMap.value, 0.001f, 0, 1.0f);
+        ImGui::Separator();
         ShowTextureInspector(materialMap.texture);
     }
 }
