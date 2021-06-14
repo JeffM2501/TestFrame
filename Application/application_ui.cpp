@@ -28,11 +28,11 @@
 *
 **********************************************************************************************/
 
-#include "application_context.h"
 #include "application_ui.h"
 #include "common_utils.h"
 #include "inspector_window.h"
 #include "platform_tools.h"
+#include "ui_window.h"
 
 #include "RLAssets.h"
 #include "raylib.h"
@@ -49,8 +49,8 @@ void UIManager::Startup()
 
     ImGui::StyleColorsDark();
 
-    Windows.emplace_back(std::make_shared<LogWindow>());
-    Windows.emplace_back(std::make_shared<InspectorWindow>());
+    AddWindow(std::make_shared<LogWindow>());
+    AddWindow(std::make_shared<InspectorWindow>());
 }
 
 void UIManager::Shutdown()
@@ -59,6 +59,18 @@ void UIManager::Shutdown()
         window->Shutdown();
 
     Windows.clear();
+}
+
+void UIManager::AddWindow(std::shared_ptr<UIWindow> window)
+{
+    Windows.emplace_back(window);
+}
+
+void UIManager::RemoveWindow(std::shared_ptr<UIWindow> window)
+{
+    std::vector<std::shared_ptr<UIWindow>>::iterator itr = std::find(Windows.begin(), Windows.end(), window);
+    if (itr != Windows.end())
+        Windows.erase(itr); 
 }
 
 void UIManager::Resized()

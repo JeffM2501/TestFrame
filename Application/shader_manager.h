@@ -28,38 +28,63 @@
 *
 **********************************************************************************************/
 
-#include "application_context.h"
-#include "main_view.h"
-#include "drawing_utils.h"
-
-#include "RaylibColors.h"
-
+#pragma once
 #include "raylib.h"
-#include "rlgl.h"
-#include "raymath.h"
 
-class SceneView : public ThreeDView
+#include <map>
+#include <string>
+#include <vector>
+
+enum class ShaderTypes
 {
-protected:
-
-public:
-    inline const char* GetName() override { return "3D View"; }
-
-    void OnSetup() override
-    {
-
-    }
-
-    void OnShutdown() override
-    {
-
-    }
-
-    void OnShow(const Rectangle& contentArea) override
-    {
-        DrawCube(Vector3{ 0,1,0 }, 1, 1, 1, Colors::DarkGreen);
-    }
-
+    Unknown = 0,
+    Vertex,
+    Fragment,
 };
 
-REGISTER_VIEW(SceneView);
+enum class UniformTypes
+{
+    Unknown = 0,
+    Bool,
+    Int,
+    Float,
+    MaterialMapIndex,
+    Projection,
+    View,
+};
+
+struct UniformInfo
+{
+    std::string Name;
+    UniformTypes UniformType = UniformTypes::Unknown;
+    bool UpdateEachFrame = false;
+    void* ValuePtr = nullptr;
+};
+
+struct ShaderInfo
+{
+    std::string PathName;
+    std::string Name;
+    ShaderTypes ShaderType = ShaderTypes::Unknown;
+
+    std::vector<UniformInfo> Uniforms;
+};
+
+struct ShaderInstance
+{
+    size_t RefCount = 0;
+
+    Shader  RaylibShader = { 0 };
+
+    ShaderInfo VertexShader;
+    ShaderInfo FragmentShader;
+};
+
+class ShaderManager
+{
+public:
+    std::map<int, ShaderInstance> ShaderCache;
+
+    Shader LoadShader(const char* vertextShaderPath, const char* fragmentShaderPath);
+};
+

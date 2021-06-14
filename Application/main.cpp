@@ -34,9 +34,6 @@
 
 #include "platform_tools.h"
 
-// #include "scene_view.h"
-// #include "sprite_view.h"
-
 #include "raylib.h"
 #include "rlgl.h"
 #include "rlImGui.h"
@@ -69,6 +66,38 @@ void ApplicationContext::Screenshot()
     }
 }
 
+void ApplicationContext::ChangeView(MainView* newView)
+{
+    if (View != nullptr)
+        View->Shutdown();
+
+    View = newView;
+    if (View != nullptr)
+        View->Setup();
+
+    if (View != nullptr)
+    {
+        Prefs.LastView = View->GetName();
+        Prefs.Save();
+    }
+}
+
+MainView* ApplicationContext::FindView(const char* name)
+{
+    if (name == nullptr)
+        return RegisteredViews[0];
+
+    std::string _name = name;
+    for (MainView* view : RegisteredViews)
+    {
+        std::string _vName = view->GetName();
+        if (_name == _vName)
+            return view;
+    }
+
+    return RegisteredViews[0];
+}
+
 void ApplicationStartup();
 void ApplicationShutdown();
 
@@ -98,17 +127,17 @@ int main(int argc, char* argv[])
 
     ApplicationStartup();
 
-    UIManager ui;
+
     GlobalContext.ChangeView(GlobalContext.FindView(GlobalContext.Prefs.LastView.c_str()));
-    ui.Startup();
+    GlobalContext.UI.Startup();
 
     // Main game loop
     while (!GlobalContext.Quit && !WindowShouldClose())    // Detect window close button or ESC key
     {
         if (IsWindowResized())
-            ui.Resized();
+            GlobalContext.UI.Resized();
 
-        const Rectangle& contentArea = ui.GetContentArea();
+        const Rectangle& contentArea = GlobalContext.UI.GetContentArea();
 
         if (contentArea.x != GlobalContext.View->LastContentArea.x || contentArea.y != GlobalContext.View->LastContentArea.y || contentArea.width != GlobalContext.View->LastContentArea.width || contentArea.height != GlobalContext.View->LastContentArea.height)
         {
@@ -116,7 +145,7 @@ int main(int argc, char* argv[])
             GlobalContext.View->ResizeContentArea(GlobalContext.View->LastContentArea);
         }
 
-        ui.Update();
+        GlobalContext.UI.Update();
         GlobalContext.View->Update();
 
         BeginDrawing();
@@ -125,7 +154,7 @@ int main(int argc, char* argv[])
         GlobalContext.View->Show(GlobalContext.View->LastContentArea);
 
         BeginRLImGui();
-        ui.Show(GlobalContext.View);
+        GlobalContext.UI.Show(GlobalContext.View);
         EndRLImGui();
 
         EndDrawing();
@@ -137,7 +166,7 @@ int main(int argc, char* argv[])
     GlobalContext.Prefs.Save();
 
     GlobalContext.ChangeView(nullptr);
-    ui.Shutdown();
+    GlobalContext.UI.Shutdown();
 
     ApplicationShutdown();
 

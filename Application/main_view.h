@@ -114,7 +114,7 @@ protected:
     virtual void OnSetup() {}
     virtual void OnShutdown() {}
     virtual void OnShowInspector(const InspectorWindow& window) {}
-
+    inline virtual void OnUpdate() {};
 public:
     void Setup() override;
     void Shutdown() override;
@@ -122,6 +122,7 @@ public:
     void ResizeContentArea(const Rectangle& contentArea) override;
     void ShowInspectorContents(const InspectorWindow& window) override;
 
+    inline void Update() override { OnUpdate(); }
 protected:
     void DrawGizmo(float scale = 1);
     void SetupSkybox();
@@ -137,13 +138,14 @@ protected:
     virtual void OnSetup() {}
     virtual void OnShutdown() {}
     virtual void OnShowInspector(const InspectorWindow& window) {}
+    inline virtual void OnUpdate() {};
 
 public:
     void Setup() override;
 
     virtual void Shutdown();
 
-    virtual void Update();
+    void Update() override;
     virtual void Show(const Rectangle& contentArea);
     void ResizeContentArea(const Rectangle& contentArea) override;
 

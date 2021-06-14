@@ -31,6 +31,7 @@
 #include "application_context.h"
 #include "drawing_utils.h"
 #include "inspector_window.h"
+#include "model_outliner.h"
 #include "platform_tools.h"
 #include "texture_manager.h"
 
@@ -49,15 +50,11 @@ protected:
 
     Texture DefaultTexture;
 
-    int SelectedMesh = -1;
-    int SelectedMaterial = -1;
-    int SelectedMaterialMap = -1;
-
-    bool ShowEmptyMaps = false;
-
     TextureManager TextureCache;
 
     std::vector<std::pair<std::string, std::string>> ImageExtensions;
+
+    std::shared_ptr<ModelOutlinerWindow> Outliner;
 
 public:
     ModelViewer()
@@ -87,93 +84,30 @@ public:
         ModelFile.transform = MatrixTranslate(0, 1, 0);
 
         Camera.SetCameraPosition(Vector3{ 0, 1, -5 });
+
+        Outliner = std::make_shared<ModelOutlinerWindow>(ModelFile);
+        GlobalContext.UI.AddWindow(Outliner);
     }
 
     void OnShutdown() override
     {
+        GlobalContext.UI.RemoveWindow(Outliner);
+        Outliner.reset();
         UnloadModel(ModelFile);
-    }
-
-    void ShowMaterialMapTreeItem(const MaterialMap& mapItem, const char* name, int materialIndex, int mapIndex)
-    {
-        bool selected = (SelectedMaterial == materialIndex && SelectedMaterialMap == materialIndex);
-
-        ImGuiSelectableFlags flags = ImGuiSelectableFlags_None;
-        if (mapItem.texture.id == 0 && !ShowEmptyMaps)
-            return;
-
-        if (ImGui::Selectable(TextFormat("%s###map%d%d", name, mapIndex, materialIndex), &selected, flags))
-        {
-            SelectedMesh = -1;
-            SelectedMaterial = materialIndex;
-            SelectedMaterialMap = mapIndex;
-        }
     }
 
     void OnShowInspector(const InspectorWindow& window) override
     {
-        ImGui::Checkbox("Show Empty Maps", &ShowEmptyMaps);
-        if (ImGui::BeginChild("ModelTree", ImVec2(ImGui::GetContentRegionAvailWidth(), 200), true))
-        {
-            bool selected = false;
-            if (ImGui::TreeNodeEx("Model Tree", ImGuiTreeNodeFlags_DefaultOpen))
-            {
-                if (ImGui::TreeNodeEx("Meshes", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    for (int i = 0; i < ModelFile.meshCount; i++)
-                    {
-                        selected = SelectedMesh == i;
-                        if (ImGui::Selectable(TextFormat("%d###mesh%d", i, i), &selected, ImGuiSelectableFlags_None))
-                        {
-                            SelectedMesh = i;
-                            SelectedMaterial = -1;
-                            SelectedMaterialMap = -1;
-                        }
-                    }
-                    ImGui::TreePop();
-                }
-
-                if (ImGui::TreeNodeEx("Materials", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    for (int i = 0; i < ModelFile.materialCount; i++)
-                    {
-                        Material& mat = ModelFile.materials[i];
-
-                        selected = SelectedMaterial == i;
-                        if (ImGui::TreeNodeEx(TextFormat("%d###material%d", i, i), ImGuiTreeNodeFlags_DefaultOpen))
-                        {
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_ALBEDO], "Albedo", i, MATERIAL_MAP_ALBEDO);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_METALNESS], "Metalness", i, MATERIAL_MAP_METALNESS);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_NORMAL], "Normal", i, MATERIAL_MAP_NORMAL);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_ROUGHNESS], "Roughness", i, MATERIAL_MAP_ROUGHNESS);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_OCCLUSION], "Occlusion", i, MATERIAL_MAP_OCCLUSION);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_EMISSION], "Emission", i, MATERIAL_MAP_EMISSION);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_HEIGHT], "Height", i, MATERIAL_MAP_HEIGHT);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_CUBEMAP], "CubeMap", i, MATERIAL_MAP_CUBEMAP);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_IRRADIANCE], "Irradiance", i, MATERIAL_MAP_IRRADIANCE);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_PREFILTER], "Prefilter", i, MATERIAL_MAP_PREFILTER);
-                            ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_BRDG], "BRDG", i, MATERIAL_MAP_BRDG);
-                            ImGui::TreePop();
-                        }
-                    }
-                    ImGui::TreePop();
-                }
-
-                ImGui::TreePop();
-            }
-            ImGui::EndChild();
-        }
         // mesh inspector
-
-        if (SelectedMesh >= 0)
+        if (Outliner->SelectedMesh >= 0)
         {
-            Inspectors::ShowMeshInspector(ModelFile.meshes[SelectedMesh]);
+            Inspectors::ShowMeshInspector(ModelFile.meshes[Outliner->SelectedMesh]);
         }
 
         // material inspector
-        if (SelectedMaterial >= 0)
+        if (Outliner->SelectedMaterial >= 0)
         {
-            Inspectors::ShowMaterialMapInspector(ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap]);
+            Inspectors::ShowMaterialMapInspector(ModelFile.materials[Outliner->SelectedMaterial].maps[Outliner->SelectedMaterialMap]);
 
             if (ImGui::Button("SetTexture"))
             {
@@ -181,12 +115,12 @@ public:
                 if (textureFile.size() > 0)
                 {
                     Texture tx = LoadTexture(textureFile.c_str());
-                    int id = ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap].texture.id;
+                    int id = ModelFile.materials[Outliner->SelectedMaterial].maps[Outliner->SelectedMaterialMap].texture.id;
 
                     if (id > 0 && id != DefaultTexture.id)
-                        TextureCache.RemoveTexture(ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap].texture);
+                        TextureCache.RemoveTexture(ModelFile.materials[Outliner->SelectedMaterial].maps[Outliner->SelectedMaterialMap].texture);
 
-                    ModelFile.materials[SelectedMaterial].maps[SelectedMaterialMap].texture = tx;
+                    ModelFile.materials[Outliner->SelectedMaterial].maps[Outliner->SelectedMaterialMap].texture = tx;
                     TextureCache.AddTexture(tx);
                 }
             }
@@ -234,9 +168,8 @@ public:
                 }
 
                 ModelFile = newModel;
-                SelectedMesh = -1;
-                SelectedMaterial = -1;
-                SelectedMaterialMap = -1;
+                Outliner->SetModel(ModelFile);
+
             }
         }
     }

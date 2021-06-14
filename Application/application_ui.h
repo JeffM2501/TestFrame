@@ -30,13 +30,14 @@
 
 #pragma once
 
-#include "ui_window.h"
-
 #include "raylib.h"
 #include "imgui.h"
 
 #include <vector>
 #include <memory>
+
+class UIWindow;
+class MainView;
 
 class UIManager
 {
@@ -48,6 +49,9 @@ public:
     void Resized();
 
     inline const Rectangle& GetContentArea() { return ContentArea; }
+
+    void AddWindow(std::shared_ptr<UIWindow> window);
+    void RemoveWindow(std::shared_ptr<UIWindow> window);
 
 protected:
     void SetupUI();

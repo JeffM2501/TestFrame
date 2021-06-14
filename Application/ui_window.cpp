@@ -105,8 +105,9 @@ void LogWindow::OnShow(MainView*)
     {
         bool scroollBottom = false;
 
+        int count = 0;
         LogSink::LogItem item;
-        if (LogSink::PopLogLine(item))
+        while (LogSink::PopLogLine(item)/* && count <= 10*/)
         {
             LogLines.emplace_back(std::move(item));
 
@@ -114,6 +115,7 @@ void LogWindow::OnShow(MainView*)
                 LogLines.pop_front();
 
             scroollBottom = true;
+            count++;
         }
 
         std::string copyBuffer;

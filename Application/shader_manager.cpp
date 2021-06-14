@@ -28,38 +28,64 @@
 *
 **********************************************************************************************/
 
-#include "application_context.h"
-#include "main_view.h"
-#include "drawing_utils.h"
+#include "shader_manager.h"
 
-#include "RaylibColors.h"
 
-#include "raylib.h"
-#include "rlgl.h"
-#include "raymath.h"
-
-class SceneView : public ThreeDView
+std::vector<std::string> GetFileLines(const char* fileName)
 {
-protected:
+    std::vector<std::string> lines;
 
-public:
-    inline const char* GetName() override { return "3D View"; }
+    FILE* fp = fopen(fileName, "r");
+    if (fp == nullptr)
+        return lines;
 
-    void OnSetup() override
+    std::string line;
+    char c = '1';
+    while (fread(&c,1,1,fp) != 0)
     {
+        if (c == '\n')
+        {
+            if (line.size() > 0)
+                lines.push_back(line);
+            line.clear();
+        }
+        else
+        {
+            line += c;
+        }
+    }
+    if (line.size() > 0)
+        lines.push_back(line);
+
+    fclose(fp);
+    return lines;
+}
+
+bool StartsWith(const char* prefix, const std::string& text)
+{
+    size_t l = strlen(prefix);
+    if (text.size() < l)
+        return false;
+
+    return strncmp(prefix, text.c_str(), l) == 0;
+}
+
+void ParseUniforms(const char* filename, ShaderInfo& shaderInfo)
+{
+    std::vector<std::string> lines = GetFileLines(filename);
+    for (std::string& line : lines)
+    {
+        if (!StartsWith("uniform ",line))
+            continue;
+
 
     }
+}
 
-    void OnShutdown() override
-    {
 
-    }
+Shader ShaderManager::LoadShader(const char* vertextShaderPath, const char* fragmentShaderPath)
+{
 
-    void OnShow(const Rectangle& contentArea) override
-    {
-        DrawCube(Vector3{ 0,1,0 }, 1, 1, 1, Colors::DarkGreen);
-    }
+    return LoadShader(vertextShaderPath, fragmentShaderPath);
+}
 
-};
-
-REGISTER_VIEW(SceneView);

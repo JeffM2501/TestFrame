@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "main_view.h"
+#include "application_ui.h"
 
 #include "RLAssets.h"
 #include "imgui.h"
@@ -38,6 +38,7 @@
 #include <vector>
 #include <string>
 
+class MainView;
 
 class ApplicationPrefs
 {
@@ -104,7 +105,7 @@ struct ApplicationContext
 {
     bool Quit = false;
     MainView* View = nullptr;
-
+    UIManager UI;
     std::vector<MainView*> RegisteredViews;
 
     ApplicationPrefs Prefs;
@@ -115,44 +116,15 @@ struct ApplicationContext
 
     static void Screenshot();
 
-    void ChangeView(MainView* newView)
-    {
-        if (View != nullptr)
-            View->Shutdown();
+    void ChangeView(MainView* newView);
 
-        View = newView;
-        if (View != nullptr)
-            View->Setup();
-
-        if (View != nullptr)
-        {
-            Prefs.LastView = View->GetName();
-            Prefs.Save();
-        }
-    }
-
-    MainView* FindView(const char* name)
-    {
-        if (name == nullptr)
-            return RegisteredViews[0];
-
-        std::string _name = name;
-        for (MainView* view : RegisteredViews)
-        {
-            std::string _vName = view->GetName();
-            if (_name == _vName)
-                return view;
-        }
-
-        return RegisteredViews[0];
-    }
+    MainView* FindView(const char* name);
 };
 
 extern ApplicationContext GlobalContext;
 
 #define REGISTER_VIEW(viewType) \
 static viewType View;
-
 
 namespace LogSink
 {

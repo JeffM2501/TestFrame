@@ -257,6 +257,8 @@ void TwoDView::Shutdown()
 
 void TwoDView::Update()
 {
+    OnUpdate();
+
     if (IsMouseButtonPressed(1))
     {
         Dragging = true;
