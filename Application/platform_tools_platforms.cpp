@@ -21,7 +21,7 @@ std::string wstrtostr(const std::wstring& wstr)
 {
     std::string strTo;
     char* szTo = new char[wstr.length() + 1];
-    szTo[wstr.size()] = '\0';
+    szTo[wstr.length()] = '\0';
     WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, szTo, (int)wstr.length(), NULL, NULL);
     strTo = szTo;
     delete[] szTo;
