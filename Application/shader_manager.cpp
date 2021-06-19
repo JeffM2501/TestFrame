@@ -133,12 +133,53 @@ void ParseUniforms(const char* filename, ShaderInfo& shaderInfo)
             UniformInfo info;
             info.UniformType = ClassifyUniformType(uniformType);
             info.Name = uniformName;
+
+            shaderInfo.Uniforms.emplace_back(std::move(info));
         }
     }
 }
 
-Shader ShaderManager::LoadShader(int materialIndex, const char* vertextShaderPath, const char* fragmentShaderPath)
+void ParseShader(const char* filename, ShaderInfo& shaderInfo)
 {
+    shaderInfo.Name = GetFileNameWithoutExt(filename);
+    shaderInfo.PathName = filename;
+
+    ParseUniforms(filename, shaderInfo);
+}
+
+void ShaderManager::Clear()
+{
+    ShaderCache.clear();
+}
+
+ShaderInstance& ShaderManager::GetShader(int materialIndex)
+{
+    return ShaderCache[materialIndex];
+}
+
+ShaderInstance& ShaderManager::LoadShader(int materialIndex, const char* vertextShaderPath, const char* fragmentShaderPath)
+{
+    ShaderInstance newInstance;
+    if (vertextShaderPath == nullptr)
+    {
+        newInstance.VertexShader.Name = "Default";
+        newInstance.VertexShader.PathName = "";
+    }
+    else
+    {
+        ParseShader(vertextShaderPath, newInstance.VertexShader);
+    }
+
+    if (fragmentShaderPath == nullptr)
+    {
+        newInstance.FragmentShader.Name = "Default";
+        newInstance.FragmentShader.PathName = "";
+    }
+    else
+    {
+        ParseShader(fragmentShaderPath, newInstance.FragmentShader);
+    }
+
     std::map<int, ShaderInstance>::iterator itr = ShaderCache.find(materialIndex);
 
     if (itr != ShaderCache.end())
@@ -147,10 +188,9 @@ Shader ShaderManager::LoadShader(int materialIndex, const char* vertextShaderPat
         ShaderCache.erase(itr);
     }
 
-    ShaderInstance& shader = ShaderCache[materialIndex];
-    shader.RaylibShader = ::LoadShader(vertextShaderPath, fragmentShaderPath);
+    newInstance.RaylibShader = ::LoadShader(vertextShaderPath, fragmentShaderPath);
 
+    ShaderCache[materialIndex] = newInstance;
 
-    return shader.RaylibShader;
+    return ShaderCache[materialIndex];
 }
-

@@ -39,9 +39,11 @@
 
 namespace Inspectors
 {
-    inline void ShowTextureInspector(const Texture& texture)
+    inline void ShowTextureInspector(const Texture& texture, float width = 0)
     {
-        float width = ImGui::GetContentRegionAvailWidth();
+        if (width <= 0)
+        width = ImGui::GetContentRegionAvailWidth();
+
         float height = width * (texture.height / (float)texture.width);
         RLImGuiImageSize(&texture, (int)width, (int)height);
         ImGui::Text("ID:%d W:%d H:%d", texture.id, texture.width, texture.height);
@@ -107,7 +109,7 @@ namespace Inspectors
         ImGui::Separator();
         ImGui::DragFloat("Value", &materialMap.value, 0.001f, 0, 1.0f);
         ImGui::Separator();
-        ShowTextureInspector(materialMap.texture);
+        ShowTextureInspector(materialMap.texture, 150);
     }
 }
 
@@ -138,9 +140,7 @@ public:
 
         int avgFPS = GetFPS();
 
-        ImGui::Text("FPS %dAvg %.0fInst", avgFPS, instantFPS);
-        ImGui::Text("Frame Time %f", frameTime);
-
+        ImGui::Text("FPS %d:Avg %.0f:Inst DT:%.2fms", avgFPS, instantFPS, frameTime * 1000);
         Vector2 mouse = view->GetViewMousePosition();
         ImGui::Text("Mouse X%.0f Y%.0f", mouse.x, mouse.y);
     }

@@ -123,7 +123,6 @@ public:
                     {
                         Material& mat = ModelFile.materials[i];
 
-                        selected = SelectedMaterial == i;
                         if (ImGui::TreeNodeEx(TextFormat("%d###material%d", i, i), ImGuiTreeNodeFlags_DefaultOpen))
                         {
                             ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_ALBEDO], "Albedo", i, MATERIAL_MAP_ALBEDO);
@@ -139,6 +138,8 @@ public:
                             ShowMaterialMapTreeItem(mat.maps[MATERIAL_MAP_BRDG], "BRDG", i, MATERIAL_MAP_BRDG);
                             ImGui::TreePop();
                         }
+                        if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+                            SelectedMaterial = i;
                     }
                     ImGui::TreePop();
                 }
