@@ -132,6 +132,14 @@ public:
     ShaderTypes ShaderType = ShaderTypes::Unknown;
 
     std::vector<UniformInfo> Uniforms;
+
+    const char* GetFileName()
+    {
+        if (PathName.size() == 0)
+            return nullptr;
+
+        return PathName.c_str();
+    }
 };
 
 class ShaderInstance
@@ -150,6 +158,8 @@ class ShaderManager
 public:
     std::map<int, ShaderInstance> ShaderCache;
 
-    Shader LoadShader(int materialIndex, const char* vertextShaderPath, const char* fragmentShaderPath);
+    void Clear();
+    ShaderInstance& GetShader(int materialIndex);
+    ShaderInstance& LoadShader(int materialIndex, const char* vertextShaderPath, const char* fragmentShaderPath);
 };
 

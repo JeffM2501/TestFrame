@@ -166,7 +166,8 @@ void ThreeDView::ShowInspectorContents(const InspectorWindow& window)
     ImGui::Text("X %.2f Y %.2f Z %.2f", camPos.x, camPos.y, camPos.z);
     Vector2 camAngles = Camera.GetViewAngles();
     ImGui::Text("Yaw%.2f Pitch%.2f", camAngles.y, camAngles.x);
-
+    ImGui::Separator();
+    ImGui::Separator();
     OnShowInspector(window);
 }
 
@@ -371,7 +372,8 @@ void TwoDView::ShowInspectorContents(const InspectorWindow& window)
 
     ImGui::Text("X %.2f Y %.2f", Camera.target.x, Camera.target.y);
     ImGui::Text("Rotation%.2f", Camera.rotation);
-
+    ImGui::Separator();
+    ImGui::Separator();
     OnShowInspector(window);
 }
 
